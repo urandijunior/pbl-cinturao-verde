@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PBL — Cinturão Verde ao Prato · ICAA 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g1:#1a3a1e;--g2:#2d6a35;--g3:#4caf60;--g4:#a8e6b3;--g5:#e8f7ea;--g6:#f1faf3;
+  --o1:#92400e;--o2:#d97706;--o3:#fef3c7;--o4:#fffbeb;
+  --r1:#7f1d1d;--r2:#dc2626;--r3:#fee2e2;--r4:#fff5f5;
+  --b1:#1e3a5f;--b2:#2563eb;--b3:#dbeafe;--b4:#eff6ff;
+  --ink:#111827;--ink2:#374151;--ink3:#6b7280;--ink4:#9ca3af;
+  --surface:#ffffff;--surface2:#f9fafb;--surface3:#f3f4f6;
+  --border:#e5e7eb;--border2:#d1d5db;
+  --radius:10px;--radius-lg:14px;--radius-xl:20px;
+  --ff-head:'Syne',sans-serif;--ff-body:'DM Sans',sans-serif;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08);
+  --shadow:0 4px 16px rgba(0,0,0,.10);
+}
+
+html,body{height:100%;font-family:var(--ff-body);color:var(--ink);background:var(--surface2);font-size:15px;line-height:1.6}
+
+/* ── SCREENS ── */
+.screen{display:none}
+.screen.active{display:block}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--g1);color:#fff;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.topbar-brand{font-family:var(--ff-head);font-size:16px;font-weight:700;display:flex;align-items:center;gap:10px}
+.topbar-dot{width:9px;height:9px;border-radius:50%;background:var(--g3)}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-tag{font-size:12px;color:rgba(255,255,255,.6);background:rgba(255,255,255,.1);padding:3px 10px;border-radius:20px}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 22px;border-radius:var(--radius);font-family:var(--ff-body);font-size:14px;font-weight:500;cursor:pointer;border:none;transition:all .18s;text-decoration:none;white-space:nowrap}
+.btn:disabled{opacity:.45;cursor:not-allowed;pointer-events:none}
+.btn-primary{background:var(--g2);color:#fff}.btn-primary:hover{background:var(--g1);transform:translateY(-1px)}
+.btn-danger{background:var(--r2);color:#fff}.btn-danger:hover{background:var(--r1)}
+.btn-ghost{background:transparent;color:var(--g2);border:1.5px solid var(--g2)}.btn-ghost:hover{background:var(--g5)}
+.btn-outline-white{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.4)}.btn-outline-white:hover{background:rgba(255,255,255,.1)}
+.btn-sm{padding:7px 15px;font-size:13px}
+.btn-lg{padding:14px 32px;font-size:15px;border-radius:var(--radius-lg)}
+.btn-full{width:100%}
+
+/* ── FORMS ── */
+.field{margin-bottom:16px}
+.field label{display:block;font-size:13px;font-weight:500;color:var(--ink2);margin-bottom:6px;letter-spacing:.01em}
+.field input[type=text],.field input[type=password],.field select,.field textarea{
+  width:100%;padding:10px 14px;border:1.5px solid var(--border2);border-radius:var(--radius);
+  font-family:var(--ff-body);font-size:14px;color:var(--ink);background:var(--surface);
+  transition:border-color .15s,box-shadow .15s;outline:none;appearance:none;-webkit-appearance:none
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--g2);box-shadow:0 0 0 3px rgba(45,106,53,.12)}
+.field textarea{min-height:90px;resize:vertical;line-height:1.6}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+
+/* ── CARDS ── */
+.card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:16px;box-shadow:var(--shadow-sm)}
+.card-hd{display:flex;align-items:flex-start;gap:12px;margin-bottom:18px}
+.card-icon{width:40px;height:40px;min-width:40px;border-radius:10px;background:var(--g5);display:flex;align-items:center;justify-content:center;color:var(--g2);font-size:20px}
+.card-icon.orange{background:var(--o3);color:var(--o1)}
+.card-icon.red{background:var(--r3);color:var(--r2)}
+.card-icon.blue{background:var(--b3);color:var(--b2)}
+.card-title{font-family:var(--ff-head);font-size:15px;font-weight:700;color:var(--g1);margin-bottom:2px}
+.card-sub{font-size:12px;color:var(--ink3)}
+
+/* ── ALERTS ── */
+.alert{padding:12px 16px;border-radius:var(--radius);font-size:13px;line-height:1.65;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start}
+.alert i{margin-top:1px;flex-shrink:0;font-size:16px}
+.alert-info{background:var(--g6);border:1px solid #b6d9be;color:var(--g1)}
+.alert-warn{background:var(--o4);border:1px solid #fcd34d;color:var(--o1)}
+.alert-danger{background:var(--r4);border:1px solid #fca5a5;color:var(--r1)}
+.alert-blue{background:var(--b4);border:1px solid #93c5fd;color:var(--b1)}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.3px}
+.badge-green{background:var(--g4);color:var(--g1)}
+.badge-orange{background:#fed7aa;color:var(--o1)}
+.badge-red{background:#fecaca;color:var(--r1)}
+.badge-gray{background:#e5e7eb;color:#374151}
+.badge-blue{background:#bfdbfe;color:var(--b1)}
+
+/* ══════════════════════════════════════
+   LOGIN SCREEN
+══════════════════════════════════════ */
+#screen-login{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:linear-gradient(135deg,#0d2411 0%,#1a3a1e 50%,#1f4d25 100%)}
+.login-box{width:100%;max-width:440px}
+.login-hero{text-align:center;margin-bottom:28px}
+.login-icon{width:80px;height:80px;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);border-radius:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:#fff;font-size:38px}
+.login-hero h1{font-family:var(--ff-head);font-size:28px;font-weight:800;color:#fff;margin-bottom:6px;letter-spacing:-.5px}
+.login-hero p{font-size:13px;color:rgba(255,255,255,.55);line-height:1.7}
+.login-card{background:rgba(255,255,255,.97);border-radius:var(--radius-xl);padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.tab-row{display:flex;border:1.5px solid var(--border2);border-radius:var(--radius);overflow:hidden;margin-bottom:22px}
+.tab-btn{flex:1;padding:10px;font-family:var(--ff-body);font-size:13px;font-weight:500;cursor:pointer;border:none;background:var(--surface);color:var(--ink3);transition:all .15s}
+.tab-btn.active{background:var(--g1);color:#fff}
+.login-footer{text-align:center;margin-top:16px;font-size:11px;color:rgba(255,255,255,.35)}
+
+/* ══════════════════════════════════════
+   APP LAYOUT
+══════════════════════════════════════ */
+#screen-app{min-height:100vh;display:flex;flex-direction:column}
+.app-content{flex:1;max-width:880px;width:100%;margin:0 auto;padding:24px 16px}
+
+/* ── SECTION NAV ── */
+.section-nav{display:flex;gap:2px;background:var(--surface3);padding:4px;border-radius:var(--radius);overflow-x:auto;margin-bottom:24px;box-shadow:inset 0 1px 3px rgba(0,0,0,.06)}
+.snav-btn{flex-shrink:0;padding:8px 14px;border:none;background:transparent;border-radius:8px;font-family:var(--ff-body);font-size:13px;font-weight:500;cursor:pointer;color:var(--ink3);transition:all .15s;white-space:nowrap}
+.snav-btn.active{background:var(--surface);color:var(--g1);font-weight:600;box-shadow:var(--shadow-sm)}
+.snav-btn:not(.active):hover{color:var(--ink2);background:rgba(255,255,255,.5)}
+
+/* ── SECTIONS ── */
+.section{display:none;animation:fadeUp .25s ease}
+.section.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.section-title{font-family:var(--ff-head);font-size:24px;font-weight:800;color:var(--g1);margin-bottom:4px;letter-spacing:-.3px}
+.section-desc{font-size:13px;color:var(--ink3);margin-bottom:22px;line-height:1.65}
+
+/* ── ROUTE TABLE ── */
+.tbl-wrap{overflow-x:auto;border-radius:var(--radius);border:1.5px solid var(--border)}
+.route-table{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
+.route-table th{background:var(--g1);color:#fff;padding:10px 12px;text-align:left;font-weight:600;font-size:11px;letter-spacing:.5px;text-transform:uppercase}
+.route-table td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+.route-table tr:last-child td{border-bottom:none}
+.route-table tbody tr:hover td{background:var(--g6)}
+.route-table select,.route-table input[type=text]{width:100%;padding:5px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;font-family:var(--ff-body);background:var(--surface);outline:none}
+.route-table select:focus,.route-table input:focus{border-color:var(--g2)}
+.cell-fixed{background:var(--surface2);color:var(--ink2);font-size:12px;white-space:nowrap}
+.cell-origin{color:var(--g1);font-weight:600;font-size:12px}
+.row-total td{background:var(--g1)!important;color:#fff;font-weight:700;font-size:13px}
+.row-return td{background:var(--g5)!important;color:var(--g1)}
+
+/* ── STATS BAR ── */
+.stats-bar{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap}
+.stat-item{flex:1;min-width:100px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px}
+.stat-item .sv{font-size:20px;font-weight:700;color:var(--g1);font-family:var(--ff-head)}
+.stat-item .sl{font-size:11px;color:var(--ink3);margin-top:2px}
+
+/* ── PROGRESS ── */
+.progress-wrap{margin-top:12px}
+.progress-track{height:8px;background:var(--surface3);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;border-radius:4px;transition:width .4s,background .3s}
+.progress-label{font-size:12px;color:var(--ink3);margin-top:6px}
+
+/* ── CALC TABLE ── */
+.calc-table{width:100%;border-collapse:collapse;font-size:13px}
+.calc-table th{padding:9px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--ink3);border-bottom:1.5px solid var(--border);letter-spacing:.4px;text-transform:uppercase}
+.calc-table td{padding:9px 12px;border-bottom:1px solid var(--border)}
+.calc-table tr:last-child td{border-bottom:none}
+.calc-table .row-total{background:var(--g5)}
+.calc-table .row-total td{font-weight:700;color:var(--g1);font-size:14px;border-top:2px solid var(--g3)}
+.val-pos{color:#15803d;font-weight:600}
+.val-neg{color:var(--r2);font-weight:600}
+.val-neu{color:var(--ink3)}
+
+/* ── REVIEW ── */
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.review-block{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px}
+.review-block .rb-label{font-size:11px;font-weight:600;color:var(--ink3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px}
+.review-block .rb-value{font-size:13px;color:var(--ink);line-height:1.5}
+
+/* ── ADMIN ── */
+#screen-admin{min-height:100vh;display:flex;flex-direction:column}
+.admin-content{flex:1;max-width:960px;width:100%;margin:0 auto;padding:24px 16px}
+.admin-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:28px}
+.admin-stat{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:18px;text-align:center;box-shadow:var(--shadow-sm)}
+.admin-stat .asv{font-size:32px;font-weight:800;font-family:var(--ff-head);margin-bottom:4px}
+.admin-stat .asl{font-size:12px;color:var(--ink3)}
+.admin-stat.green .asv{color:var(--g2)}
+.admin-stat.orange .asv{color:var(--o2)}
+.admin-stat.blue .asv{color:var(--b2)}
+
+.group-card{border:1.5px solid var(--border);border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden;box-shadow:var(--shadow-sm)}
+.group-card-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--surface);cursor:pointer;transition:background .15s;gap:12px}
+.group-card-hd:hover{background:var(--surface2)}
+.group-card-hd .ghd-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.group-card-hd .gname{font-family:var(--ff-head);font-size:15px;font-weight:700;color:var(--g1)}
+.group-card-hd .gts{font-size:11px;color:var(--ink4)}
+.group-card-body{display:none;padding:20px;border-top:1.5px solid var(--border);background:var(--surface)}
+.group-card-body.open{display:block;animation:fadeUp .2s ease}
+.resp-block{margin-bottom:14px}
+.resp-label{font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.6px;text-transform:uppercase;margin-bottom:4px}
+.resp-value{font-size:13px;color:var(--ink2);line-height:1.65;white-space:pre-wrap;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px}
+.resp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+
+/* ── SUBMIT ── */
+.submitted-view{text-align:center;padding:40px 24px}
+.submitted-view .sv-icon{font-size:56px;color:var(--g2);margin-bottom:16px}
+.submitted-view h3{font-family:var(--ff-head);font-size:22px;font-weight:800;color:var(--g1);margin-bottom:8px}
+.submitted-view p{font-size:13px;color:var(--ink3);line-height:1.7}
+.submitted-view .sv-ts{font-size:12px;color:var(--ink4);margin-top:12px;font-style:italic}
+
+/* ── NAV FOOTER ── */
+.nav-footer{display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:16px;border-top:1px solid var(--border)}
+.nav-footer .step-ind{font-size:12px;color:var(--ink3)}
+
+/* ── TOAST ── */
+#toast-wrap{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{background:var(--g1);color:#fff;padding:12px 18px;border-radius:var(--radius);font-size:13px;font-weight:500;box-shadow:var(--shadow);pointer-events:auto;display:flex;align-items:center;gap:8px;animation:slideUp .3s ease}
+.toast.err{background:var(--r1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  .field-row,.field-row3,.review-grid,.resp-grid{grid-template-columns:1fr}
+  .app-content,.admin-content{padding:16px 12px}
+  .section-title{font-size:20px}
+  .route-table{font-size:11px}
+  .route-table th,.route-table td{padding:6px 8px}
+  .topbar{padding:0 14px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ TOAST ═══════════ -->
+<div id="toast-wrap"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     LOGIN
+═══════════════════════════════════════════════════ -->
+<div id="screen-login" class="screen active">
+  <div class="login-box">
+    <div class="login-hero">
+      <div class="login-icon"><i class="ti ti-tractor"></i></div>
+      <h1>PBL — Cinturão Verde</h1>
+      <p>Logística Integrada · ICAA 2026<br>Agronomia &nbsp;·&nbsp; Eng. Agrícola e Ambiental &nbsp;·&nbsp; Zootecnia</p>
+    </div>
+    <div class="login-card">
+      <div class="tab-row">
+        <button class="tab-btn active" id="tab-g" onclick="switchTab('g')">
+          <i class="ti ti-users"></i> Entrar como Grupo
+        </button>
+        <button class="tab-btn" id="tab-p" onclick="switchTab('p')">
+          <i class="ti ti-shield"></i> Professor
+        </button>
+      </div>
+
+      <!-- grupo -->
+      <div id="pane-g">
+        <div class="field">
+          <label>Grupo</label>
+          <select id="sel-grupo">
+            <option value="">Selecione seu grupo...</option>
+            <option>Grupo 1</option><option>Grupo 2</option><option>Grupo 3</option>
+            <option>Grupo 4</option><option>Grupo 5</option><option>Grupo 6</option>
+            <option>Grupo 7</option><option>Grupo 8</option><option>Grupo 9</option>
+            <option>Grupo 10</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Curso</label>
+          <select id="sel-curso">
+            <option value="">Selecione o curso...</option>
+            <option>Agronomia</option>
+            <option>Engenharia Agrícola e Ambiental</option>
+            <option>Zootecnia</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Senha do Grupo</label>
+          <input type="password" id="inp-pw-g" placeholder="Senha fornecida pelo professor"
+            onkeydown="if(event.key==='Enter')loginGrupo()">
+        </div>
+        <button class="btn btn-primary btn-full btn-lg" onclick="loginGrupo()">
+          <i class="ti ti-login"></i> Entrar
+        </button>
+      </div>
+
+      <!-- professor -->
+      <div id="pane-p" style="display:none">
+        <div class="alert alert-blue"><i class="ti ti-info-circle"></i> Acesso exclusivo para visualização e download das respostas.</div>
+        <div class="field">
+          <label>Senha do Professor</label>
+          <input type="password" id="inp-pw-p" placeholder="Senha de administrador"
+            onkeydown="if(event.key==='Enter')loginAdmin()">
+        </div>
+        <button class="btn btn-primary btn-full btn-lg" onclick="loginAdmin()">
+          <i class="ti ti-shield-check"></i> Acessar Painel
+        </button>
+      </div>
+    </div>
+    <div class="login-footer">ICAA 2026 · v2.0 · Onda de Calor + Jornada de Trabalho</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     APP — ALUNOS
+═══════════════════════════════════════════════════ -->
+<div id="screen-app" class="screen">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-dot"></div>
+      <span id="tb-group">Grupo</span>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-tag" id="tb-curso"></span>
+      <button class="btn btn-outline-white btn-sm" onclick="logout()">
+        <i class="ti ti-logout"></i> Sair
+      </button>
+    </div>
+  </div>
+
+  <div class="app-content">
+    <nav class="section-nav" id="secNav">
+      <button class="snav-btn active" onclick="goSection(0,this)">1. Identificação</button>
+      <button class="snav-btn" onclick="goSection(1,this)">2. Decisão</button>
+      <button class="snav-btn" onclick="goSection(2,this)">3. Roteiro</button>
+      <button class="snav-btn" onclick="goSection(3,this)">4. Custos</button>
+      <button class="snav-btn" onclick="goSection(4,this)">5. Perecibilidade</button>
+      <button class="snav-btn" onclick="goSection(5,this)">6. Entrega</button>
+    </nav>
+
+    <!-- ── S1 IDENTIFICAÇÃO ── -->
+    <div class="section active" id="sec0">
+      <div class="section-title">Identificação do Grupo</div>
+      <div class="section-desc">Registre os membros. Estas informações ficam vinculadas à entrega.</div>
+      <div class="card">
+        <div class="card-hd"><div class="card-icon"><i class="ti ti-users"></i></div>
+          <div><div class="card-title">Membros do Grupo</div><div class="card-sub">Mínimo 1, máximo 6</div></div>
+        </div>
+        <div class="field-row"><div class="field"><label>Membro 1</label><input type="text" id="m1" placeholder="Nome completo"></div><div class="field"><label>Membro 2</label><input type="text" id="m2" placeholder="Nome completo"></div></div>
+        <div class="field-row"><div class="field"><label>Membro 3</label><input type="text" id="m3" placeholder="Nome completo"></div><div class="field"><label>Membro 4</label><input type="text" id="m4" placeholder="Nome completo"></div></div>
+        <div class="field-row"><div class="field"><label>Membro 5</label><input type="text" id="m5" placeholder="Nome completo"></div><div class="field"><label>Membro 6 (opcional)</label><input type="text" id="m6" placeholder="Nome completo"></div></div>
+      </div>
+    </div>
+
+    <!-- ── S2 DECISÃO ── -->
+    <div class="section" id="sec1">
+      <div class="section-title">Matriz de Decisão</div>
+      <div class="section-desc">Defina critérios, objetivos e justifique as 6 cidades escolhidas.</div>
+      <div class="alert alert-warn"><i class="ti ti-thermometer"></i><div><strong>Onda de Calor esta semana:</strong> +15% no combustível (refrigeração). Considere isso na estratégia de rota.</div></div>
+      <div class="alert alert-danger"><i class="ti ti-clock"></i><div><strong>Jornada máxima:</strong> Retorno à fazenda até 15:00h (saída 07:00h = 10h de operação). Ultrapassar = −R$3.000.</div></div>
+      <div class="card">
+        <div class="card-hd"><div class="card-icon"><i class="ti ti-target"></i></div><div><div class="card-title">Critério e Objetivos</div></div></div>
+        <div class="field">
+          <label>Critério prioritário de decisão</label>
+          <select id="criterio">
+            <option value="">Selecione...</option>
+            <option>Maximizar receita bruta (bônus Cidade A)</option>
+            <option>Minimizar custo de combustível e tempo</option>
+            <option>Priorizar integridade da carga (evitar Cidade F)</option>
+            <option>Pagamento à vista e fluxo de caixa (Cidade K)</option>
+            <option>Integração com Zootecnia (rota via Cidade I)</option>
+            <option>Combinação de critérios (explicar abaixo)</option>
+          </select>
+        </div>
+        <div class="field"><label>Objetivo principal do grupo</label><textarea id="objetivo" placeholder="Ex: Maximizar o resultado financeiro líquido priorizando a entrega de tilápia na Cidade A e evitando a estrada de terra de F..."></textarea></div>
+        <div class="field"><label>Metas quantitativas definidas</label><textarea id="metas" placeholder="Ex: Resultado líquido acima de R$8.000, rota abaixo de 8h, evitar penalidade de jornada de R$3.000..."></textarea></div>
+        <div class="field"><label>Como o grupo tratou a Onda de Calor (+15% combustível)?</label><textarea id="onda_resp" placeholder="Ex: Priorizamos rotas mais curtas para reduzir tempo de refrigeração e custo extra..."></textarea></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-icon"><i class="ti ti-map-2"></i></div><div><div class="card-title">Seleção das 6 Cidades</div><div class="card-sub">Escolha e justifique cada cidade</div></div></div>
+        <div id="city-selects"></div>
+        <div class="field" style="margin-top:6px"><label>Justificativa geral da seleção</label><textarea id="just-cidades" placeholder="Explique por que escolheu estas 6 cidades e não as demais. Considere a combinação de vantagens e restrições..."></textarea></div>
+      </div>
+    </div>
+
+    <!-- ── S3 ROTEIRO ── -->
+    <div class="section" id="sec2">
+      <div class="section-title">Roteiro de Entrega</div>
+      <div class="section-desc">Defina a ordem de visita. Caminhão sai às 07:00h. Cidades com restrições de horário exigem atenção.</div>
+      <div class="alert alert-warn"><i class="ti ti-clock"></i> <strong>Cidade D:</strong> só aceita entregas antes das 08:00h. Se for incluída, deve ser a 1ª parada (saindo 07:00h da fazenda).</div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div class="tbl-wrap">
+          <table class="route-table">
+            <thead>
+              <tr><th>#</th><th>Origem</th><th>Destino</th><th>Dist (km)</th><th>Tempo</th><th>Justificativa</th></tr>
+            </thead>
+            <tbody id="route-tbody"></tbody>
+          </table>
+        </div>
+        <div style="padding:16px 18px;border-top:1px solid var(--border)">
+          <div class="stats-bar">
+            <div class="stat-item"><div class="sv" id="st-km">0 km</div><div class="sl">Distância total</div></div>
+            <div class="stat-item"><div class="sv" id="st-time">00:00</div><div class="sl">Tempo total</div></div>
+            <div class="stat-item"><div class="sv" id="st-pct">0%</div><div class="sl">Da jornada de 10h</div></div>
+            <div class="stat-item"><div class="sv" id="st-ret">15:00</div><div class="sl">Retorno estimado</div></div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+            <div class="progress-label" id="prog-label">Partida 07:00 → Retorno estimado: 07:00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── S4 CUSTOS ── -->
+    <div class="section" id="sec3">
+      <div class="section-title">Cálculo de Custos e Receita</div>
+      <div class="section-desc">Memória de cálculo com todos os bônus e penalidades do exercício.</div>
+      <div class="card">
+        <div class="card-hd"><div class="card-icon"><i class="ti ti-calculator"></i></div><div><div class="card-title">Cálculo Automático (referência)</div><div class="card-sub">Baseado nas cidades selecionadas no Roteiro</div></div></div>
+        <table class="calc-table">
+          <thead><tr><th>Item</th><th>Condição / Regra</th><th style="text-align:right;min-width:120px">Valor (R$)</th></tr></thead>
+          <tbody id="calc-tbody"></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-icon"><i class="ti ti-pencil"></i></div><div><div class="card-title">Sua Memória de Cálculo</div><div class="card-sub">Mostre todas as contas — este campo é avaliado</div></div></div>
+        <div class="field"><label>Memória de cálculo detalhada</label><textarea id="memoria" style="min-height:140px" placeholder="Ex:
+Distância total = 320 km
+Combustível base: 320 × R$2,50 = R$800,00
+Onda de Calor (+15%): R$800 × 1,15 = R$920,00
+Cidade J no trecho Fazenda→J (65km): +30% = 65×2,50×0,30×1,15 = R$56,06
+Valor da carga base = R$10.000,00
+Bônus Cidade A: +R$2.000,00
+...
+Resultado: R$10.000 + R$2.000 - R$920 - R$56 = R$11.024"></textarea></div>
+      </div>
+    </div>
+
+    <!-- ── S5 PERECIBILIDADE ── -->
+    <div class="section" id="sec4">
+      <div class="section-title">Análise de Perecibilidade</div>
+      <div class="section-desc">Demonstre que a viabilidade da carga perecível foi considerada.</div>
+      <div class="card">
+        <div class="card-hd"><div class="card-icon"><i class="ti ti-fish"></i></div><div><div class="card-title">Tilápia Fresca — Cadeia de Frio</div><div class="card-sub">Requer refrigeração rigorosa; Onda de Calor impacta 15% no custo</div></div></div>
+        <div class="field"><label>Como a tilápia foi protegida na rota? (considere os 35°C da Onda de Calor)</label><textarea id="tilap" placeholder="Ex: Entregamos a tilápia primeiro na Cidade A (maior preço) para reduzir o tempo em cadeia de frio. A onda de calor foi mitigada pela rota curta total..."></textarea></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-icon"><i class="ti ti-plant"></i></div><div><div class="card-title">Hortaliças Folhosas — Altamente Perecíveis</div><div class="card-sub">Penalidade de R$1.000 se rota exceder 12 horas totais</div></div></div>
+        <div class="field"><label>Estratégia para as hortaliças (risco de perda por temperatura)</label><textarea id="hortalica" placeholder="Ex: A rota foi planejada para ficar abaixo de 8h totais, evitando a penalidade de R$1.000 por perda de qualidade nas hortaliças..."></textarea></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-icon orange"><i class="ti ti-apple"></i></div><div><div class="card-title">Frutas de Época — Sensíveis ao Transporte</div><div class="card-sub">Cidade F: risco de avaria com perda de R$1.500</div></div></div>
+        <div class="field"><label>Como as frutas foram protegidas? (avaliar a decisão sobre a Cidade F)</label><textarea id="frutas" placeholder="Ex: Evitamos a Cidade F para preservar as frutas. / Incluímos F e planejamos a visita à Cidade I logo após para aproveitar a economia circular..."></textarea></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-icon blue"><i class="ti ti-recycle"></i></div><div><div class="card-title">Integração Zootecnia — Economia Circular (se aplicável)</div></div></div>
+        <div class="alert alert-blue" style="margin-bottom:14px"><i class="ti ti-info-circle"></i> Se a rota passou por F (avaria) e depois por I, as frutas amassadas podem ser vendidas como suplemento animal a 50% do valor, reduzindo o prejuízo.</div>
+        <div class="field"><label>Descreva se e como a economia circular (F → I) foi aplicada</label><textarea id="zootecnia" placeholder="Ex: Não aplicável — evitamos a Cidade F. / Sim: após a avaria em F, entregamos as frutas amassadas em I como suplemento animal, reduzindo a perda de R$1.500 para R$750..."></textarea></div>
+      </div>
+    </div>
+
+    <!-- ── S6 ENTREGA ── -->
+    <div class="section" id="sec5">
+      <div class="section-title">Revisão e Entrega</div>
+      <div class="section-desc">Confira tudo e submeta. Após a entrega, as respostas ficam travadas.</div>
+      <div id="review-area"></div>
+      <div id="submit-card">
+        <div class="card">
+          <div class="card-hd"><div class="card-icon"><i class="ti ti-send"></i></div><div><div class="card-title">Observações Finais (opcional)</div></div></div>
+          <div class="field"><label>Comentários adicionais do grupo</label><textarea id="obs" placeholder="Alguma consideração sobre a rota, dificuldades, alternativas avaliadas..."></textarea></div>
+        </div>
+        <div class="alert alert-warn"><i class="ti ti-lock"></i> <strong>Atenção:</strong> Após submeter, as respostas ficam travadas para garantir integridade. Certifique-se de que tudo está correto.</div>
+        <button class="btn btn-primary btn-full btn-lg" id="btn-submit" onclick="submitForm()">
+          <i class="ti ti-send"></i> Submeter Planejamento de Logística
+        </button>
+      </div>
+      <div id="submitted-view" style="display:none" class="card">
+        <div class="submitted-view">
+          <div class="sv-icon"><i class="ti ti-circle-check"></i></div>
+          <h3>Planejamento Entregue com Sucesso!</h3>
+          <p>Sua resposta foi salva e está disponível para o professor.<br>Nenhum outro grupo pode ver o conteúdo desta entrega.</p>
+          <div class="sv-ts" id="sv-ts"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-footer">
+      <button class="btn btn-ghost btn-sm" id="btn-prev" onclick="navigate(-1)"><i class="ti ti-arrow-left"></i> Anterior</button>
+      <span class="step-ind" id="step-ind">1 / 6</span>
+      <button class="btn btn-primary btn-sm" id="btn-next" onclick="navigate(1)">Próximo <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     ADMIN — PROFESSOR
+═══════════════════════════════════════════════════ -->
+<div id="screen-admin" class="screen">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="topbar-dot"></div><span>Painel do Professor — PBL 2026</span></div>
+    <div class="topbar-right">
+      <button class="btn btn-outline-white btn-sm" onclick="exportAll()"><i class="ti ti-download"></i> Exportar Tudo</button>
+      <button class="btn btn-outline-white btn-sm" onclick="logout()"><i class="ti ti-logout"></i> Sair</button>
+    </div>
+  </div>
+  <div class="admin-content">
+    <div class="admin-stats" id="admin-stats"></div>
+    <div id="admin-groups"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// DADOS
+// ═══════════════════════════════════════════════
+const GROUPS = {
+  'Grupo 1' :'g1pw1',  'Grupo 2' :'g2pw2',  'Grupo 3' :'g3pw3',
+  'Grupo 4' :'g4pw4',  'Grupo 5' :'g5pw5',  'Grupo 6' :'g6pw6',
+  'Grupo 7' :'g7pw7',  'Grupo 8' :'g8pw8',  'Grupo 9' :'g9pw9',
+  'Grupo 10':'g10pw10'
+};
+const ADMIN_PW = 'prof2026';
+
+const CITIES = [
+  'A – Centro Metropolitano','B – Polo Gastronômico','C – Entroncamento Logístico',
+  'D – Cidade Universitária','E – Vila Turística','F – Distrito Industrial',
+  'G – Porto Seco','H – Centro de Distribuição','I – Comunidade Rural',
+  'J – Estância Climática','K – Polo Comercial','L – Subúrbio em Crescimento'
+];
+
+const DIST = {
+  'Fazenda':{'A':71,'B':40,'C':35,'D':47,'E':62,'F':57,'G':65,'H':80,'I':38,'J':65,'K':45,'L':55,'Fazenda':0},
+  'A':{'Fazenda':71,'B':68,'C':90,'D':104,'E':120,'F':122,'G':58,'H':40,'I':85,'J':50,'K':95,'L':30,'A':0},
+  'B':{'Fazenda':40,'A':68,'C':25,'D':87,'E':55,'F':61,'G':91,'H':110,'I':45,'J':33,'K':50,'L':75,'B':0},
+  'C':{'Fazenda':35,'A':90,'B':25,'D':60,'E':45,'F':50,'G':105,'H':130,'I':30,'J':55,'K':20,'L':85,'C':0},
+  'D':{'Fazenda':47,'A':104,'B':87,'C':60,'E':35,'F':76,'G':67,'H':95,'I':40,'J':111,'K':42,'L':90,'D':0},
+  'E':{'Fazenda':62,'A':120,'B':55,'C':45,'D':35,'F':40,'G':115,'H':145,'I':55,'J':85,'K':30,'L':110,'E':0},
+  'F':{'Fazenda':57,'A':122,'B':61,'C':50,'D':76,'E':40,'G':120,'H':150,'I':70,'J':94,'K':45,'L':130,'F':0},
+  'G':{'Fazenda':65,'A':58,'B':91,'C':105,'D':67,'E':115,'F':120,'H':35,'I':80,'J':95,'K':70,'L':45,'G':0},
+  'H':{'Fazenda':80,'A':40,'B':110,'C':130,'D':95,'E':145,'F':150,'G':35,'I':110,'J':115,'K':90,'L':25,'H':0},
+  'I':{'Fazenda':38,'A':85,'B':45,'C':30,'D':40,'E':55,'F':70,'G':80,'H':110,'J':75,'K':35,'L':65,'I':0},
+  'J':{'Fazenda':65,'A':50,'B':33,'C':55,'D':111,'E':85,'F':94,'G':95,'H':115,'I':75,'K':65,'L':60,'J':0},
+  'K':{'Fazenda':45,'A':95,'B':50,'C':20,'D':42,'E':30,'F':45,'G':70,'H':90,'I':35,'J':65,'L':80,'K':0},
+  'L':{'Fazenda':55,'A':30,'B':75,'C':85,'D':90,'E':110,'F':130,'G':45,'H':25,'I':65,'J':60,'K':80,'L':0}
+};
+
+const TIMES = {
+  'Fazenda':{'A':'03:11','B':'00:40','C':'00:35','D':'00:47','E':'01:02','F':'01:27','G':'01:05','H':'02:50','I':'00:38','J':'01:20','K':'00:45','L':'00:55'},
+  'A':{'Fazenda':'01:11','B':'01:08','C':'01:30','D':'01:44','E':'02:00','F':'02:32','G':'00:58','H':'02:10','I':'01:25','J':'01:05','K':'01:35','L':'00:30'},
+  'B':{'Fazenda':'00:40','A':'03:08','C':'00:25','D':'01:27','E':'00:55','F':'01:31','G':'01:31','H':'03:20','I':'00:45','J':'00:48','K':'00:50','L':'01:15'},
+  'C':{'Fazenda':'00:35','A':'03:30','B':'00:25','D':'01:00','E':'00:45','F':'01:20','G':'01:45','H':'03:40','I':'00:30','J':'01:10','K':'00:20','L':'01:25'},
+  'D':{'Fazenda':'00:47','A':'03:44','B':'01:27','C':'01:00','E':'00:35','F':'01:46','G':'01:07','H':'03:05','I':'00:40','J':'02:06','K':'00:42','L':'01:30'},
+  'E':{'Fazenda':'01:02','A':'04:00','B':'00:55','C':'00:45','D':'00:35','F':'01:10','G':'01:55','H':'03:55','I':'00:55','J':'01:40','K':'00:30','L':'01:50'},
+  'F':{'Fazenda':'00:57','A':'04:02','B':'01:01','C':'00:50','D':'01:16','E':'00:40','G':'02:00','H':'04:00','I':'01:10','J':'01:49','K':'00:45','L':'02:10'},
+  'G':{'Fazenda':'01:05','A':'02:58','B':'01:31','C':'01:45','D':'01:07','E':'01:55','F':'02:30','H':'02:05','I':'01:20','J':'01:50','K':'01:10','L':'00:45'},
+  'H':{'Fazenda':'01:20','A':'02:40','B':'01:50','C':'02:10','D':'01:35','E':'02:25','F':'03:00','G':'00:35','I':'01:50','J':'02:10','K':'01:30','L':'00:25'},
+  'I':{'Fazenda':'00:38','A':'03:25','B':'00:45','C':'00:30','D':'00:40','E':'00:55','F':'01:40','G':'01:20','H':'03:20','J':'01:30','K':'00:35','L':'01:05'},
+  'J':{'Fazenda':'01:05','A':'02:50','B':'00:33','C':'00:55','D':'01:51','E':'01:25','F':'02:04','G':'01:35','H':'03:25','I':'01:15','K':'01:05','L':'01:00'},
+  'K':{'Fazenda':'00:45','A':'03:35','B':'00:50','C':'00:20','D':'00:42','E':'00:30','F':'01:15','G':'01:10','H':'03:00','I':'00:35','J':'01:20','L':'01:20'},
+  'L':{'Fazenda':'00:55','A':'02:30','B':'01:15','C':'01:25','D':'01:30','E':'01:50','F':'02:10','G':'00:45','H':'00:25','I':'01:05','J':'01:00','K':'01:20'}
+};
+
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+let currentGroup = null;
+let currentSection = 0;
+const SECTION_COUNT = 6;
+
+// ═══════════════════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════════════════
+function storageKey(g){ return 'pbl2026_' + g.replace(/\s+/g,'_'); }
+function loadGroup(g){
+  try{ return JSON.parse(localStorage.getItem(storageKey(g))) || {submitted:false,data:{}}; }
+  catch(e){ return {submitted:false,data:{}}; }
+}
+function saveGroup(g, obj){ localStorage.setItem(storageKey(g), JSON.stringify(obj)); }
+
+// ═══════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════
+function cityKey(label){ return label ? label.split('–')[0].trim() : ''; }
+
+function parseMins(hhmm){
+  if(!hhmm||hhmm==='—') return 0;
+  const p = hhmm.split(':');
+  return parseInt(p[0]||0)*60 + parseInt(p[1]||0);
+}
+function fmtHHMM(mins){
+  const h = Math.floor(Math.abs(mins)/60);
+  const m = Math.abs(mins)%60;
+  return h.toString().padStart(2,'0') + ':' + m.toString().padStart(2,'0');
+}
+function addTime(hhmm, mins){
+  const base = 7*60; // 07:00
+  const total = base + mins;
+  return fmtHHMM(total);
+}
+function getDist(o,d){ return (DIST[o]&&DIST[o][d]) ? DIST[o][d] : 0; }
+function getTime(o,d){ return (TIMES[o]&&TIMES[o][d]) ? TIMES[o][d] : '00:00'; }
+function fmt(v){ return 'R$\u00a0' + Math.round(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+// ═══════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════
+function toast(msg, err){
+  const w = document.getElementById('toast-wrap');
+  const t = document.createElement('div');
+  t.className = 'toast' + (err?' err':'');
+  t.innerHTML = `<i class="ti ti-${err?'alert-circle':'check'}"></i> ${msg}`;
+  w.appendChild(t);
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>t.remove(),300); }, 3000);
+}
+
+// ═══════════════════════════════════════════════
+// LOGIN
+// ═══════════════════════════════════════════════
+function switchTab(t){
+  document.getElementById('pane-g').style.display = t==='g'?'':'none';
+  document.getElementById('pane-p').style.display = t==='p'?'':'none';
+  document.getElementById('tab-g').className = 'tab-btn'+(t==='g'?' active':'');
+  document.getElementById('tab-p').className = 'tab-btn'+(t==='p'?' active':'');
+}
+
+function loginGrupo(){
+  const g = document.getElementById('sel-grupo').value;
+  const c = document.getElementById('sel-curso').value;
+  const p = document.getElementById('inp-pw-g').value;
+  if(!g||!c){ toast('Selecione grupo e curso.',true); return; }
+  if(!GROUPS[g]||GROUPS[g]!==p){ toast('Senha incorreta para ' + g + '.',true); return; }
+  currentGroup = g;
+  document.getElementById('tb-group').textContent = g;
+  document.getElementById('tb-curso').textContent = c;
+  showScreen('app');
+  buildCitySelects();
+  buildRouteTable();
+  buildCalcTable();
+  loadFormData();
+  const d = loadGroup(g);
+  if(d.submitted) showSubmittedState(d.submittedAt);
+}
+
+function loginAdmin(){
+  const p = document.getElementById('inp-pw-p').value;
+  if(p !== ADMIN_PW){ toast('Senha incorreta.',true); return; }
+  showScreen('admin');
+  renderAdmin();
+}
+
+function logout(){
+  currentGroup = null;
+  document.getElementById('inp-pw-g').value='';
+  document.getElementById('inp-pw-p').value='';
+  document.getElementById('sel-grupo').value='';
+  document.getElementById('sel-curso').value='';
+  showScreen('login');
+}
+
+function showScreen(s){
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  document.getElementById('screen-'+s).classList.add('active');
+}
+
+// ═══════════════════════════════════════════════
+// SECTION NAVIGATION
+// ═══════════════════════════════════════════════
+function goSection(idx, btn){
+  document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
+  document.getElementById('sec'+idx).classList.add('active');
+  document.querySelectorAll('.snav-btn').forEach(x=>x.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  currentSection = idx;
+  updateNav();
+  if(idx===5) buildReview();
+  if(idx===3) updateCalc();
+}
+
+function navigate(dir){
+  const ni = Math.max(0, Math.min(SECTION_COUNT-1, currentSection+dir));
+  const btn = document.querySelectorAll('.snav-btn')[ni];
+  goSection(ni, btn);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateNav(){
+  document.getElementById('btn-prev').disabled = currentSection===0;
+  document.getElementById('btn-next').style.display = currentSection===SECTION_COUNT-1 ? 'none' : '';
+  document.getElementById('step-ind').textContent = (currentSection+1) + ' / ' + SECTION_COUNT;
+}
+
+// ═══════════════════════════════════════════════
+// BUILD CITY SELECTS (S2)
+// ═══════════════════════════════════════════════
+function buildCitySelects(){
+  const opts = '<option value="">Selecione...</option>' + CITIES.map(c=>`<option>${c}</option>`).join('');
+  const el = document.getElementById('city-selects');
+  el.innerHTML = '';
+  for(let i=1;i<=6;i++){
+    const row = document.createElement('div');
+    row.className = 'field-row';
+    row.innerHTML = `
+      <div class="field"><label>Cidade ${i}</label>
+        <select id="city${i}" onchange="syncCityToRoute()">
+          ${opts}
+        </select></div>
+      <div class="field"><label>Motivo da escolha</label>
+        <input type="text" id="cityr${i}" placeholder="Por que esta cidade?"></div>`;
+    el.appendChild(row);
+  }
+}
+
+function syncCityToRoute(){
+  for(let i=1;i<=6;i++){
+    const cv = document.getElementById('city'+i);
+    const rv = document.getElementById('rd'+i);
+    if(cv&&rv) rv.value = cv.value;
+  }
+  updateRouteCalc();
+}
+
+// ═══════════════════════════════════════════════
+// BUILD ROUTE TABLE (S3)
+// ═══════════════════════════════════════════════
+function buildRouteTable(){
+  const opts = '<option value="">Escolha...</option>' + CITIES.map(c=>`<option>${c}</option>`).join('');
+  const tbody = document.getElementById('route-tbody');
+  tbody.innerHTML = '';
+
+  for(let i=1;i<=6;i++){
+    const tr = document.createElement('tr');
+    const origCell = i===1
+      ? `<td class="cell-fixed cell-origin">Fazenda</td>`
+      : `<td class="cell-fixed" id="ro${i}">—</td>`;
+    tr.innerHTML = `
+      <td class="cell-fixed" style="font-weight:700;color:var(--g2)">${i}</td>
+      ${origCell}
+      <td><select id="rd${i}" onchange="updateRouteCalc()"><br>${opts}</select></td>
+      <td class="cell-fixed" id="rkm${i}">—</td>
+      <td class="cell-fixed" id="rtime${i}">—</td>
+      <td><input type="text" id="rjust${i}" placeholder="Justificativa..."></td>`;
+    tbody.appendChild(tr);
+  }
+
+  // retorno
+  const trRet = document.createElement('tr');
+  trRet.className = 'row-return';
+  trRet.innerHTML = `
+    <td style="font-weight:700;color:var(--g2)">7</td>
+    <td id="ro7" class="cell-origin">—</td>
+    <td class="cell-origin">Fazenda (retorno)</td>
+    <td id="rkm7">—</td>
+    <td id="rtime7">—</td>
+    <td style="color:var(--ink3);font-size:12px">Retorno obrigatório</td>`;
+  tbody.appendChild(trRet);
+}
+
+function getRouteDests(){
+  return Array.from({length:6},(_,i)=>document.getElementById('rd'+(i+1))?.value||'');
+}
+
+function updateRouteCalc(){
+  const dests = getRouteDests();
+  let totalKm=0, totalMins=0;
+
+  for(let i=1;i<=6;i++){
+    const origLabel = i===1 ? 'Fazenda' : dests[i-2];
+    const destLabel = dests[i-1];
+    const orig = i===1 ? 'Fazenda' : cityKey(origLabel);
+    const dest = cityKey(destLabel);
+
+    // update origin cell
+    if(i>1){
+      const el = document.getElementById('ro'+i);
+      if(el) el.textContent = origLabel || '—';
+    }
+    if(orig&&dest&&orig!==dest){
+      const km = getDist(orig,dest);
+      const t  = getTime(orig,dest);
+      document.getElementById('rkm'+i).textContent   = km+' km';
+      document.getElementById('rtime'+i).textContent = t;
+      totalKm   += km;
+      totalMins += parseMins(t);
+    } else {
+      document.getElementById('rkm'+i).textContent   = '—';
+      document.getElementById('rtime'+i).textContent = '—';
+    }
+  }
+
+  // retorno
+  const lastLabel = dests[5];
+  const lastKey   = cityKey(lastLabel);
+  const roEl = document.getElementById('ro7');
+  if(roEl) roEl.textContent = lastLabel||'—';
+  if(lastKey){
+    const km = getDist(lastKey,'Fazenda');
+    const t  = getTime(lastKey,'Fazenda');
+    document.getElementById('rkm7').textContent   = km+' km';
+    document.getElementById('rtime7').textContent = t;
+    totalKm   += km;
+    totalMins += parseMins(t);
+  } else {
+    document.getElementById('rkm7').textContent   = '—';
+    document.getElementById('rtime7').textContent = '—';
+  }
+
+  const pct = Math.min(110, Math.round(totalMins/600*100));
+  const retTime = fmtHHMM(7*60+totalMins);
+  document.getElementById('st-km').textContent   = totalKm+' km';
+  document.getElementById('st-time').textContent = fmtHHMM(totalMins);
+  document.getElementById('st-pct').textContent  = pct+'%';
+  document.getElementById('st-ret').textContent  = retTime;
+  const fill = document.getElementById('prog-fill');
+  fill.style.width = Math.min(100,pct)+'%';
+  fill.style.background = pct>100?'var(--r2)':pct>85?'var(--o2)':'var(--g2)';
+  document.getElementById('prog-label').textContent =
+    `Partida 07:00 → Retorno estimado: ${retTime} (${fmtHHMM(totalMins)} de 10:00 disponíveis)`;
+
+  // sync s2 cities
+  dests.forEach((d,i)=>{
+    const el = document.getElementById('city'+(i+1));
+    if(el&&el.value!==d) el.value=d;
+  });
+
+  if(document.getElementById('sec3').classList.contains('active')) updateCalc();
+}
+
+// ═══════════════════════════════════════════════
+// CALC TABLE
+// ═══════════════════════════════════════════════
+function buildCalcTable(){
+  const rows = [
+    ['c-comb',   'Combustível Base',           'Distância total × R$2,50',                           '—'],
+    ['c-oc',     '+15% Onda de Calor',          'Refrigeração extra (temperatura 35°C)',               '—'],
+    ['c-serraJ', 'Ajuste Serra – Cidade J',     '+30% no trecho com J',                               '—'],
+    ['c-carga',  'Valor da Carga Base',          'Estimativa bruta',                                   'R$\u00a010.000,00'],
+    ['c-bonusA', 'Bônus Cidade A',               '+R$2.000 se peixe entregue lá',                     '—'],
+    ['c-perdaF', 'Perda Estrada – Cidade F',     '−R$1.500 se rota com frutas passa por F',            '—'],
+    ['c-ptemp',  'Penalidade Temperatura',       '−R$1.000 se rota total > 12h',                      '—'],
+    ['c-oppK',   'Oportunidade – Cidade K',      'K entre as 3 primeiras paradas: −R$300 em sementes', '—'],
+    ['c-multaD', 'Multa – Cidade D',             '−R$500 se chegada após 08:00h',                     '—'],
+    ['c-eficG',  'Eficiência – Cidade G',        '−R$500 do custo total (frete retorno)',              '—'],
+    ['c-pjorn',  'Penalidade Jornada',           '−R$3.000 se retorno após 15:00h',                   '—'],
+  ];
+  const tbody = document.getElementById('calc-tbody');
+  tbody.innerHTML = rows.map(([id,name,cond,val])=>`
+    <tr>
+      <td>${name}</td>
+      <td style="color:var(--ink3);font-size:12px">${cond}</td>
+      <td style="text-align:right" id="${id}">${val}</td>
+    </tr>`).join('');
+  tbody.innerHTML += `<tr class="row-total"><td colspan="2"><strong>RESULTADO FINANCEIRO ESTIMADO</strong></td><td style="text-align:right" id="c-result">—</td></tr>`;
+}
+
+function updateCalc(){
+  const dests = getRouteDests();
+  const keys  = dests.filter(Boolean).map(cityKey);
+  let totalKm=0, totalMins=0;
+
+  for(let i=0;i<6;i++){
+    const orig = i===0 ? 'Fazenda' : cityKey(dests[i-1]);
+    const dest = cityKey(dests[i]);
+    if(orig&&dest&&orig!==dest){
+      totalKm   += getDist(orig,dest);
+      totalMins += parseMins(getTime(orig,dest));
+    }
+  }
+  const lastKey = cityKey(dests[5]);
+  if(lastKey){ totalKm+=getDist(lastKey,'Fazenda'); totalMins+=parseMins(getTime(lastKey,'Fazenda')); }
+
+  const combBase = totalKm*2.5;
+  const combOC   = combBase*0.15;
+  const hasJ=keys.includes('J');
+  let ajJ=0;
+  if(hasJ){
+    const ji=keys.indexOf('J');
+    const oJ=ji===0?'Fazenda':keys[ji-1];
+    const dJ=ji<keys.length-1?keys[ji+1]:'Fazenda';
+    ajJ=((getDist(oJ,'J')+getDist('J',dJ))*2.5*0.30*1.15);
+  }
+  const hasA=keys.includes('A');
+  const hasF=keys.includes('F');
+  const hasG=keys.includes('G');
+  const hasD=keys.includes('D');
+  const hasK=keys.includes('K');
+  const kPos=keys.indexOf('K');
+  const penTemp  = totalMins>720?1000:0;
+  const penJorn  = totalMins>600?3000:0;
+  const oppK     = hasK&&kPos<3?300:0;
+  const multaD   = hasD?500:0;
+  const eficG    = hasG?500:0;
+
+  const carga    = 10000 + (hasA?2000:0) - (hasF?1500:0) - penTemp - multaD - penJorn;
+  const custos   = combBase + combOC + ajJ - eficG;
+  const resultado= carga - custos + oppK;
+
+  const set=(id,v,cls)=>{ const el=document.getElementById(id); if(el){el.innerHTML=v; if(cls){el.className=cls;}} };
+
+  set('c-comb',   fmt(combBase));
+  set('c-oc',     `<span class="val-neg">${fmt(combOC)}</span>`);
+  set('c-serraJ', hasJ ? `<span class="val-neg">${fmt(-ajJ)}</span>` : '<span class="val-neu">não aplica</span>');
+  set('c-carga',  'R$\u00a010.000,00');
+  set('c-bonusA', hasA ? `<span class="val-pos">+${fmt(2000)}</span>` : '<span class="val-neu">não incluso</span>');
+  set('c-perdaF', hasF ? `<span class="val-neg">−${fmt(1500)}</span>` : '<span class="val-neu">não aplica</span>');
+  set('c-ptemp',  penTemp ? `<span class="val-neg">−${fmt(penTemp)}</span>` : '<span class="val-neu">não aplica</span>');
+  set('c-oppK',   oppK ? `<span class="val-pos">−${fmt(oppK)} (sementes)</span>` : '<span class="val-neu">não aplica</span>');
+  set('c-multaD', hasD ? `<span class="val-neg">verificar horário (−${fmt(500)} se atrasado)</span>` : '<span class="val-neu">não incluso</span>');
+  set('c-eficG',  hasG ? `<span class="val-pos">−${fmt(500)} do custo</span>` : '<span class="val-neu">não incluso</span>');
+  set('c-pjorn',  penJorn ? `<span class="val-neg">−${fmt(penJorn)}</span>` : '<span class="val-neu">não aplica</span>');
+  const resEl = document.getElementById('c-result');
+  if(resEl){ resEl.innerHTML = `<strong class="${resultado>=0?'val-pos':'val-neg'}">${fmt(resultado)}</strong>`; }
+}
+
+// ═══════════════════════════════════════════════
+// FORM DATA
+// ═══════════════════════════════════════════════
+function collectForm(){
+  const dests = getRouteDests();
+  return {
+    membros: [1,2,3,4,5,6].map(i=>document.getElementById('m'+i)?.value||'').filter(Boolean),
+    criterio: document.getElementById('criterio')?.value||'',
+    objetivo: document.getElementById('objetivo')?.value||'',
+    metas:    document.getElementById('metas')?.value||'',
+    onda_resp:document.getElementById('onda_resp')?.value||'',
+    cidades:  [1,2,3,4,5,6].map(i=>({
+      cidade:document.getElementById('city'+i)?.value||'',
+      motivo:document.getElementById('cityr'+i)?.value||''
+    })),
+    just_cidades:document.getElementById('just-cidades')?.value||'',
+    rota: [1,2,3,4,5,6].map(i=>({
+      destino:  document.getElementById('rd'+i)?.value||'',
+      justificativa:document.getElementById('rjust'+i)?.value||''
+    })),
+    memoria:  document.getElementById('memoria')?.value||'',
+    tilap:    document.getElementById('tilap')?.value||'',
+    hortalica:document.getElementById('hortalica')?.value||'',
+    frutas:   document.getElementById('frutas')?.value||'',
+    zootecnia:document.getElementById('zootecnia')?.value||'',
+    obs:      document.getElementById('obs')?.value||''
+  };
+}
+
+function saveProgress(){
+  if(!currentGroup) return;
+  const d = loadGroup(currentGroup);
+  if(!d.submitted){ d.data = collectForm(); saveGroup(currentGroup,d); }
+}
+
+function loadFormData(){
+  const d = loadGroup(currentGroup);
+  const f = d.data||{};
+  [1,2,3,4,5,6].forEach((n,i)=>{
+    const el=document.getElementById('m'+n); if(el) el.value=f.membros?.[i]||'';
+  });
+  ['criterio','objetivo','metas','onda_resp','just-cidades','memoria','tilap','hortalica','frutas','zootecnia'].forEach(id=>{
+    const key=id.replace(/-/g,'_');
+    const el=document.getElementById(id); if(el) el.value=f[key]||'';
+  });
+  if(f.cidades) f.cidades.forEach((c,i)=>{
+    const a=document.getElementById('city'+(i+1)); if(a) a.value=c.cidade||'';
+    const b=document.getElementById('cityr'+(i+1)); if(b) b.value=c.motivo||'';
+  });
+  if(f.rota) f.rota.forEach((r,i)=>{
+    const a=document.getElementById('rd'+(i+1)); if(a) a.value=r.destino||'';
+    const b=document.getElementById('rjust'+(i+1)); if(b) b.value=r.justificativa||'';
+  });
+  updateRouteCalc();
+}
+
+// ═══════════════════════════════════════════════
+// REVIEW & SUBMIT
+// ═══════════════════════════════════════════════
+function buildReview(){
+  saveProgress();
+  const f = collectForm();
+  const dests = f.rota.map(r=>r.destino).filter(Boolean).map(cityKey);
+  let totalKm=0,totalMins=0;
+  f.rota.forEach((r,i)=>{
+    const orig=i===0?'Fazenda':cityKey(f.rota[i-1].destino);
+    const dest=cityKey(r.destino);
+    if(orig&&dest&&orig!==dest){totalKm+=getDist(orig,dest);totalMins+=parseMins(getTime(orig,dest));}
+  });
+  if(dests[5]){totalKm+=getDist(dests[5],'Fazenda');totalMins+=parseMins(getTime(dests[5],'Fazenda'));}
+
+  const issues=[];
+  if(!f.membros.length) issues.push('Identifique ao menos 1 membro do grupo');
+  if(!f.criterio)        issues.push('Selecione o critério principal na seção Decisão');
+  if(dests.length<6)     issues.push(`Roteiro incompleto: ${dests.length}/6 cidades`);
+  if(totalMins>600)      issues.push(`Jornada excede 10h (${fmtHHMM(totalMins)}) → penalidade de R$3.000`);
+
+  const alertHtml = issues.length
+    ? `<div class="alert alert-danger"><i class="ti ti-alert-circle"></i><div><strong>Pendências antes de submeter:</strong><br>${issues.map(i=>`• ${i}`).join('<br>')}</div></div>`
+    : `<div class="alert alert-info"><i class="ti ti-circle-check"></i><div><strong>Tudo pronto!</strong> Revise o resumo abaixo e submeta.</div></div>`;
+
+  const area = document.getElementById('review-area');
+  area.innerHTML = alertHtml + `
+    <div class="review-grid">
+      <div class="review-block"><div class="rb-label">Membros</div><div class="rb-value">${f.membros.join(', ')||'—'}</div></div>
+      <div class="review-block"><div class="rb-label">Critério Principal</div><div class="rb-value">${f.criterio||'—'}</div></div>
+    </div>
+    <div class="review-block" style="margin-bottom:12px"><div class="rb-label">Rota (${dests.length}/6 cidades)</div>
+      <div class="rb-value">${dests.join(' → ')||'—'} → Fazenda<br>
+        <span style="font-size:12px;color:var(--ink3)">${totalKm}km · ${fmtHHMM(totalMins)} · Retorno ~${fmtHHMM(7*60+totalMins)}</span>
+      </div>
+    </div>
+    <div class="review-grid" style="margin-bottom:12px">
+      <div class="review-block"><div class="rb-label">Objetivo</div><div class="rb-value" style="font-size:12px">${f.objetivo||'—'}</div></div>
+      <div class="review-block"><div class="rb-label">Onda de Calor</div><div class="rb-value" style="font-size:12px">${f.onda_resp||'—'}</div></div>
+    </div>`;
+}
+
+function submitForm(){
+  saveProgress();
+  const d = loadGroup(currentGroup);
+  const f = d.data;
+  const issues=[];
+  if(!f.membros?.length)              issues.push('Identifique ao menos 1 membro');
+  if(!f.criterio)                     issues.push('Selecione o critério principal');
+  if(f.rota?.filter(r=>r.destino).length<6) issues.push('Defina as 6 cidades do roteiro');
+  if(issues.length){ toast(issues[0], true); return; }
+
+  d.submitted   = true;
+  d.submittedAt = new Date().toLocaleString('pt-BR');
+  d.curso       = document.getElementById('tb-curso').textContent;
+  saveGroup(currentGroup, d);
+  showSubmittedState(d.submittedAt);
+  toast('Planejamento entregue com sucesso!');
+}
+
+function showSubmittedState(ts){
+  const sc = document.getElementById('submit-card');
+  const sv = document.getElementById('submitted-view');
+  if(sc) sc.style.display='none';
+  if(sv) sv.style.display='block';
+  const tsEl=document.getElementById('sv-ts');
+  if(tsEl) tsEl.textContent='Entregue em: '+ts;
+  // lock inputs
+  document.querySelectorAll('#screen-app input,#screen-app select,#screen-app textarea').forEach(el=>el.disabled=true);
+}
+
+// ═══════════════════════════════════════════════
+// ADMIN
+// ═══════════════════════════════════════════════
+function renderAdmin(){
+  const all = Object.keys(GROUPS);
+  const submitted = all.filter(g=>loadGroup(g).submitted);
+  const pending   = all.filter(g=>!loadGroup(g).submitted);
+
+  document.getElementById('admin-stats').innerHTML = `
+    <div class="admin-stat"><div class="asv">${all.length}</div><div class="asl">Grupos totais</div></div>
+    <div class="admin-stat green"><div class="asv">${submitted.length}</div><div class="asl">Entregues</div></div>
+    <div class="admin-stat orange"><div class="asv">${pending.length}</div><div class="asl">Pendentes</div></div>
+    <div class="admin-stat blue"><div class="asv">${Math.round(submitted.length/all.length*100)}%</div><div class="asl">Conclusão</div></div>`;
+
+  const el = document.getElementById('admin-groups');
+  el.innerHTML='';
+  all.forEach(g=>{
+    const d = loadGroup(g);
+    const badge = d.submitted
+      ? `<span class="badge badge-green"><i class="ti ti-check"></i> Entregue</span>`
+      : `<span class="badge badge-orange"><i class="ti ti-clock"></i> Pendente</span>`;
+    const dests = d.data?.rota?.map(r=>r.destino).filter(Boolean).map(cityKey)||[];
+    const membros = d.data?.membros?.join(', ')||'—';
+
+    const div=document.createElement('div'); div.className='group-card';
+    div.innerHTML=`
+      <div class="group-card-hd" onclick="toggleGC(this)">
+        <div class="ghd-left">
+          <span class="gname">${g}</span>
+          ${badge}
+          <span class="gts">${d.curso||''} ${d.submittedAt?'· '+d.submittedAt:''}</span>
+        </div>
+        <i class="ti ti-chevron-down"></i>
+      </div>
+      <div class="group-card-body" id="gcb-${g.replace(/\s/g,'_')}">
+        <div class="resp-grid">
+          <div class="resp-block"><div class="resp-label">Membros</div><div class="resp-value">${membros}</div></div>
+          <div class="resp-block"><div class="resp-label">Critério Principal</div><div class="resp-value">${d.data?.criterio||'—'}</div></div>
+        </div>
+        <div class="resp-block" style="margin-bottom:12px">
+          <div class="resp-label">Rota Escolhida</div>
+          <div class="resp-value">${dests.join(' → ')||'—'} → Fazenda</div>
+        </div>
+        <div class="resp-grid">
+          <div class="resp-block"><div class="resp-label">Objetivo</div><div class="resp-value">${d.data?.objetivo||'—'}</div></div>
+          <div class="resp-block"><div class="resp-label">Metas</div><div class="resp-value">${d.data?.metas||'—'}</div></div>
+        </div>
+        <div class="resp-block" style="margin-bottom:12px">
+          <div class="resp-label">Resposta — Onda de Calor</div>
+          <div class="resp-value">${d.data?.onda_resp||'—'}</div>
+        </div>
+        <div class="resp-block" style="margin-bottom:12px">
+          <div class="resp-label">Memória de Cálculo</div>
+          <div class="resp-value">${d.data?.memoria||'—'}</div>
+        </div>
+        <div class="resp-grid">
+          <div class="resp-block"><div class="resp-label">Tilápia</div><div class="resp-value">${d.data?.tilap||'—'}</div></div>
+          <div class="resp-block"><div class="resp-label">Hortaliças</div><div class="resp-value">${d.data?.hortalica||'—'}</div></div>
+        </div>
+        <div class="resp-grid" style="margin-top:12px">
+          <div class="resp-block"><div class="resp-label">Frutas</div><div class="resp-value">${d.data?.frutas||'—'}</div></div>
+          <div class="resp-block"><div class="resp-label">Zootecnia / Economia Circular</div><div class="resp-value">${d.data?.zootecnia||'—'}</div></div>
+        </div>
+        ${d.data?.obs?`<div class="resp-block" style="margin-top:12px"><div class="resp-label">Observações Finais</div><div class="resp-value">${d.data.obs}</div></div>`:''}
+        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" onclick="exportGroup('${g}')"><i class="ti ti-download"></i> Exportar JSON</button>
+          ${d.submitted?`<button class="btn btn-danger btn-sm" onclick="if(confirm('Reabrir entrega de ${g}? O grupo poderá editar novamente.')){reopen('${g}')}"><i class="ti ti-lock-open"></i> Reabrir</button>`:''}
+        </div>
+      </div>`;
+    el.appendChild(div);
+  });
+}
+
+function toggleGC(hd){
+  const body = hd.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+function exportGroup(g){
+  const d = loadGroup(g);
+  const blob = new Blob([JSON.stringify(d,null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'PBL2026_'+g.replace(/\s/g,'_')+'.json';
+  a.click();
+  toast('JSON exportado: '+g);
+}
+
+function exportAll(){
+  const all = Object.keys(GROUPS);
+  const data = {};
+  all.forEach(g=>data[g]=loadGroup(g));
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'PBL2026_TODOS_GRUPOS.json';
+  a.click();
+  toast('Exportação completa baixada!');
+}
+
+function reopen(g){
+  const d = loadGroup(g);
+  d.submitted=false; d.submittedAt=null;
+  saveGroup(g,d);
+  renderAdmin();
+  toast(g+' reaberto para edição.');
+}
+
+// ═══════════════════════════════════════════════
+// AUTO-SAVE
+// ═══════════════════════════════════════════════
+setInterval(saveProgress, 25000);
+window.addEventListener('beforeunload', saveProgress);
+
+// init nav
+updateNav();
+</script>
+</body>
+</html>
