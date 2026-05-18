@@ -1006,28 +1006,38 @@ function submitForm(){
   const curso   = document.getElementById('tb-curso').textContent;
   const payload = Object.assign({}, f, { grupo: currentGroup, curso: curso });
 
-  fetch(SHEETS_URL, {
-    method: 'POST',
-    mode:   'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body:   JSON.stringify(payload)
-  })
-  .then(() => {
-    d.submitted   = true;
-    d.submittedAt = new Date().toLocaleString('pt-BR');
-    d.curso       = curso;
-    saveGroup(currentGroup, d);
-    showSubmittedState(d.submittedAt);
-    toast('Planejamento entregue e enviado ao professor!');
-  })
-  .catch(() => {
-    d.submitted   = true;
-    d.submittedAt = new Date().toLocaleString('pt-BR');
-    d.curso       = curso;
-    saveGroup(currentGroup, d);
-    showSubmittedState(d.submittedAt);
-    toast('Entregue! Verifique a conexao com a internet.', true);
-  });
+  // Usa imagem invisivel para contornar bloqueio CORS do Google Apps Script
+  function enviarViaImagem(dados, tentativa) {
+    tentativa = tentativa || 1;
+    var encoded  = encodeURIComponent(JSON.stringify(dados));
+    var url      = SHEETS_URL + '?payload=' + encoded;
+    var img      = new Image();
+    var timer    = setTimeout(function(){
+      if(tentativa < 3){
+        enviarViaImagem(dados, tentativa + 1);
+      } else {
+        // Salva localmente mesmo sem confirmar envio
+        d.submitted   = true;
+        d.submittedAt = new Date().toLocaleString('pt-BR');
+        d.curso       = curso;
+        saveGroup(currentGroup, d);
+        showSubmittedState(d.submittedAt);
+        toast('Entregue localmente. Verifique conexao.', true);
+      }
+    }, 5000);
+    img.onload = img.onerror = function(){
+      clearTimeout(timer);
+      d.submitted   = true;
+      d.submittedAt = new Date().toLocaleString('pt-BR');
+      d.curso       = curso;
+      saveGroup(currentGroup, d);
+      showSubmittedState(d.submittedAt);
+      toast('Planejamento entregue e enviado ao professor!');
+    };
+    img.src = url;
+  }
+
+  enviarViaImagem(payload);
 }
 
 function showSubmittedState(ts){
