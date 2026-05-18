@@ -499,6 +499,7 @@ const GROUPS = {
   'Grupo 10':'g10pw10'
 };
 const ADMIN_PW = 'prof2026';
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxo6UOa-2XotofASSK_Axjzx8Hk6Hd6ZnGZnQU8D7F490GIThNaP_fC-5XI7u_6bGOr/exec';
 
 const CITIES = [
   'A – Centro Metropolitano','B – Polo Gastronômico','C – Entroncamento Logístico',
@@ -993,17 +994,40 @@ function submitForm(){
   const d = loadGroup(currentGroup);
   const f = d.data;
   const issues=[];
-  if(!f.membros?.length)              issues.push('Identifique ao menos 1 membro');
-  if(!f.criterio)                     issues.push('Selecione o critério principal');
+  if(!f.membros?.length)                    issues.push('Identifique ao menos 1 membro');
+  if(!f.criterio)                           issues.push('Selecione o critério principal');
   if(f.rota?.filter(r=>r.destino).length<6) issues.push('Defina as 6 cidades do roteiro');
   if(issues.length){ toast(issues[0], true); return; }
 
-  d.submitted   = true;
-  d.submittedAt = new Date().toLocaleString('pt-BR');
-  d.curso       = document.getElementById('tb-curso').textContent;
-  saveGroup(currentGroup, d);
-  showSubmittedState(d.submittedAt);
-  toast('Planejamento entregue com sucesso!');
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader"></i> Enviando...';
+
+  const curso   = document.getElementById('tb-curso').textContent;
+  const payload = Object.assign({}, f, { grupo: currentGroup, curso: curso });
+
+  fetch(SHEETS_URL, {
+    method: 'POST',
+    mode:   'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body:   JSON.stringify(payload)
+  })
+  .then(() => {
+    d.submitted   = true;
+    d.submittedAt = new Date().toLocaleString('pt-BR');
+    d.curso       = curso;
+    saveGroup(currentGroup, d);
+    showSubmittedState(d.submittedAt);
+    toast('Planejamento entregue e enviado ao professor!');
+  })
+  .catch(() => {
+    d.submitted   = true;
+    d.submittedAt = new Date().toLocaleString('pt-BR');
+    d.curso       = curso;
+    saveGroup(currentGroup, d);
+    showSubmittedState(d.submittedAt);
+    toast('Entregue! Verifique a conexao com a internet.', true);
+  });
 }
 
 function showSubmittedState(ts){
