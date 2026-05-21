@@ -249,8 +249,6 @@ html,body{height:100%;font-family:var(--ff-body);color:var(--ink);background:var
             <option value="">Selecione seu grupo...</option>
             <option>Grupo 1</option><option>Grupo 2</option><option>Grupo 3</option>
             <option>Grupo 4</option><option>Grupo 5</option><option>Grupo 6</option>
-            <option>Grupo 7</option><option>Grupo 8</option><option>Grupo 9</option>
-            <option>Grupo 10</option>
           </select>
         </div>
         <div class="field">
@@ -322,11 +320,13 @@ html,body{height:100%;font-family:var(--ff-body);color:var(--ink);background:var
       <div class="section-desc">Registre os membros. Estas informações ficam vinculadas à entrega.</div>
       <div class="card">
         <div class="card-hd"><div class="card-icon"><i class="ti ti-users"></i></div>
-          <div><div class="card-title">Membros do Grupo</div><div class="card-sub">Mínimo 1, máximo 6</div></div>
+          <div><div class="card-title">Membros do Grupo</div><div class="card-sub">Mínimo 1, máximo 10</div></div>
         </div>
         <div class="field-row"><div class="field"><label>Membro 1</label><input type="text" id="m1" placeholder="Nome completo"></div><div class="field"><label>Membro 2</label><input type="text" id="m2" placeholder="Nome completo"></div></div>
         <div class="field-row"><div class="field"><label>Membro 3</label><input type="text" id="m3" placeholder="Nome completo"></div><div class="field"><label>Membro 4</label><input type="text" id="m4" placeholder="Nome completo"></div></div>
-        <div class="field-row"><div class="field"><label>Membro 5</label><input type="text" id="m5" placeholder="Nome completo"></div><div class="field"><label>Membro 6 (opcional)</label><input type="text" id="m6" placeholder="Nome completo"></div></div>
+        <div class="field-row"><div class="field"><label>Membro 5</label><input type="text" id="m5" placeholder="Nome completo"></div><div class="field"><label>Membro 6</label><input type="text" id="m6" placeholder="Nome completo"></div></div>
+        <div class="field-row"><div class="field"><label>Membro 7 (opcional)</label><input type="text" id="m7" placeholder="Nome completo"></div><div class="field"><label>Membro 8 (opcional)</label><input type="text" id="m8" placeholder="Nome completo"></div></div>
+        <div class="field-row"><div class="field"><label>Membro 9 (opcional)</label><input type="text" id="m9" placeholder="Nome completo"></div><div class="field"><label>Membro 10 (opcional)</label><input type="text" id="m10" placeholder="Nome completo"></div></div>
       </div>
     </div>
 
@@ -494,10 +494,8 @@ Resultado: R$10.000 + R$2.000 - R$920 - R$56 = R$11.024"></textarea></div>
 // DADOS
 // ═══════════════════════════════════════════════
 const GROUPS = {
-  'Grupo 1' :'g1pw1',  'Grupo 2' :'g2pw2',  'Grupo 3' :'g3pw3',
-  'Grupo 4' :'g4pw4',  'Grupo 5' :'g5pw5',  'Grupo 6' :'g6pw6',
-  'Grupo 7' :'g7pw7',  'Grupo 8' :'g8pw8',  'Grupo 9' :'g9pw9',
-  'Grupo 10':'g10pw10'
+  'Grupo 1':'g1pw1', 'Grupo 2':'g2pw2', 'Grupo 3':'g3pw3',
+  'Grupo 4':'g4pw4', 'Grupo 5':'g5pw5', 'Grupo 6':'g6pw6'
 };
 const ADMIN_PW = 'prof2026';
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxo6UOa-2XotofASSK_Axjzx8Hk6Hd6ZnGZnQU8D7F490GIThNaP_fC-5XI7u_6bGOr/exec';
@@ -947,7 +945,7 @@ function updateCalc(){
 function collectForm(){
   const dests = getRouteDests();
   return {
-    membros: [1,2,3,4,5,6].map(i=>document.getElementById('m'+i)?.value||'').filter(Boolean),
+    membros: [1,2,3,4,5,6,7,8,9,10].map(i=>document.getElementById('m'+i)?.value||'').filter(Boolean),
     criterio: document.getElementById('criterio')?.value||'',
     objetivo: document.getElementById('objetivo')?.value||'',
     metas:    document.getElementById('metas')?.value||'',
@@ -979,7 +977,7 @@ function saveProgress(){
 function loadFormData(){
   const d = loadGroup(currentGroup);
   const f = d.data||{};
-  [1,2,3,4,5,6].forEach((n,i)=>{
+  [1,2,3,4,5,6,7,8,9,10].forEach((n,i)=>{
     const el=document.getElementById('m'+n); if(el) el.value=f.membros?.[i]||'';
   });
   ['criterio','objetivo','metas','onda_resp','just-cidades','memoria','tilap','hortalica','frutas','zootecnia'].forEach(id=>{
