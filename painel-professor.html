@@ -495,13 +495,15 @@ function calcFin(rota){
   var combBase=totalKm*2.5-descontoC,combOC=combBase*0.15;
   var hasJ=keys.indexOf('J')>=0,ajJ=0;
   if(hasJ){var ji=keys.indexOf('J');var oJ=ji===0?'Fazenda':keys[ji-1];var dJ=ji<keys.length-1?keys[ji+1]:'Fazenda';ajJ=(gd(oJ,'J')+gd('J',dJ))*2.5*0.30*1.15;}
-  var hasA=keys.indexOf('A')>=0,hasF=keys.indexOf('F')>=0,hasG=keys.indexOf('G')>=0;
+  var hasA=keys.indexOf('A')>=0,hasB=keys.indexOf('B')>=0,hasE=keys.indexOf('E')>=0;
+  var hasF=keys.indexOf('F')>=0,hasG=keys.indexOf('G')>=0;
   var hasD=keys.indexOf('D')>=0,hasK=keys.indexOf('K')>=0,kPos=keys.indexOf('K');
+  var bonusB=hasB?1500:0,bonusE=hasE?1500:0;
   var penTemp=totalMins>720?1000:0,penJorn=totalMins>600?3000:0;
   var oppK=(hasK&&kPos<3)?300:0,multaD=hasD?500:0,eficG=hasG?500:0;
-  var carga=10000+(hasA?2000:0)-(hasF?1500:0)-penTemp-multaD-penJorn;
+  var carga=10000+(hasA?2000:0)+bonusB+bonusE-(hasF?1500:0)-penTemp-multaD-penJorn;
   var resultado=carga-(combBase+combOC+ajJ-eficG)+oppK;
-  return{totalKm:totalKm,totalMins:totalMins,combBase:combBase,combOC:combOC,ajJ:ajJ,descontoC:descontoC,hasA:hasA,hasF:hasF,hasG:hasG,hasD:hasD,hasK:hasK,hasC:hasC,kPos:kPos,penTemp:penTemp,penJorn:penJorn,oppK:oppK,multaD:multaD,eficG:eficG,resultado:resultado,keys:keys};
+  return{totalKm:totalKm,totalMins:totalMins,combBase:combBase,combOC:combOC,ajJ:ajJ,descontoC:descontoC,hasA:hasA,hasB:hasB,hasE:hasE,bonusB:bonusB,bonusE:bonusE,hasF:hasF,hasG:hasG,hasD:hasD,hasK:hasK,hasC:hasC,kPos:kPos,penTemp:penTemp,penJorn:penJorn,oppK:oppK,multaD:multaD,eficG:eficG,resultado:resultado,keys:keys};
 }
 
 // ═══════════════════════════════════════════════
@@ -605,6 +607,8 @@ function renderBody(row,rota,fin){
     ['Ajuste Serra (J)',fin.ajJ?fr(-fin.ajJ):'nao aplica',fin.ajJ?'vn':'vne'],
     ['Valor da Carga Base','R$\u00a010.000,00','vm'],
     ['Bonus Cidade A',fin.hasA?'+'+fr(2000):'nao incluso',fin.hasA?'vp':'vne'],
+    ['Bonus Cidade B (hortalicas +15%)',fin.hasB?'+'+fr(fin.bonusB):'nao incluso',fin.hasB?'vp':'vne'],
+    ['Bonus Cidade E (frutas +15%)',fin.hasE?'+'+fr(fin.bonusE):'nao incluso',fin.hasE?'vp':'vne'],
     ['Perda Estrada F',fin.hasF?'-'+fr(1500):'nao aplica',fin.hasF?'vn':'vne'],
     ['Penalidade Temperatura',fin.penTemp?'-'+fr(fin.penTemp):'nao aplica',fin.penTemp?'vn':'vne'],
     ['Oportunidade K',fin.oppK?'-'+fr(fin.oppK):'nao aplica',fin.oppK?'vp':'vne'],

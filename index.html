@@ -366,6 +366,7 @@ html,body{height:100%;font-family:var(--ff-body);color:var(--ink);background:var
       <div class="section-title">Roteiro de Entrega</div>
       <div class="section-desc">Defina a ordem de visita. Caminhão sai às 05:00h da fazenda. Sem horário fixo de retorno, mas a jornada total não pode ultrapassar 10h.</div>
       <div class="alert alert-warn"><i class="ti ti-clock"></i> <strong>Cidade D:</strong> só aceita entregas antes das 08:00h. Se for incluída, deve ser a 1ª parada (saindo 05:00h da fazenda — chegada estimada ~05:47h, dentro do prazo).</div>
+      <div class="alert alert-info"><i class="ti ti-trending-up"></i><div><strong>Cidade B — Polo Gastronômico:</strong> se a rota estiver carregada de hortaliças, aplica-se <b>+15% na margem</b> (+R$ 1.500,00 sobre o valor da carga).<br><strong>Cidade E — Vila Turística:</strong> se a rota estiver carregada de frutas, aplica-se <b>+15% na margem</b> (+R$ 1.500,00 sobre o valor da carga).</div></div>
       <div class="card" style="padding:0;overflow:hidden">
         <div class="tbl-wrap">
           <table class="route-table">
@@ -816,6 +817,8 @@ function buildCalcTable(){
     ['c-serraJ', 'Ajuste Serra – Cidade J',     '+30% no trecho com J',                               '—'],
     ['c-carga',  'Valor da Carga Base',          'Estimativa bruta',                                   'R$\u00a010.000,00'],
     ['c-bonusA', 'Bônus Cidade A',               '+R$2.000 se peixe entregue lá',                     '—'],
+    ['c-bonusB', 'Bônus Cidade B — Polo Gastronômico', '+15% margem (R$1.500) se rota com hortaliças',     '—'],
+    ['c-bonusE', 'Bônus Cidade E — Vila Turística',    '+15% margem (R$1.500) se rota com frutas',         '—'],
     ['c-perdaF', 'Perda Estrada – Cidade F',     '−R$1.500 se rota com frutas passa por F',            '—'],
     ['c-ptemp',  'Penalidade Temperatura',       '−R$1.000 se rota total > 12h',                      '—'],
     ['c-oppK',   'Oportunidade – Cidade K',      'K entre as 3 primeiras paradas: −R$300 em sementes', '—'],
@@ -868,18 +871,23 @@ function updateCalc(){
     ajJ=((getDist(oJ,'J')+getDist('J',dJ))*2.5*0.30*1.15);
   }
   const hasA=keys.includes('A');
+  const hasB=keys.includes('B');
+  const hasE=keys.includes('E');
   const hasF=keys.includes('F');
   const hasG=keys.includes('G');
   const hasD=keys.includes('D');
   const hasK=keys.includes('K');
   const kPos=keys.indexOf('K');
+  // Cidade B: +15% margem hortalicas; Cidade E: +15% margem frutas
+  const bonusB = hasB ? 10000*0.15 : 0; // +R$1.500 sobre o valor bruto
+  const bonusE = hasE ? 10000*0.15 : 0; // +R$1.500 sobre o valor bruto
   const penTemp  = totalMins>720?1000:0;
   const penJorn  = totalMins>600?3000:0;
   const oppK     = hasK&&kPos<3?300:0;
   const multaD   = hasD?500:0;
   const eficG    = hasG?500:0;
 
-  const carga    = 10000 + (hasA?2000:0) - (hasF?1500:0) - penTemp - multaD - penJorn;
+  const carga    = 10000 + (hasA?2000:0) + bonusB + bonusE - (hasF?1500:0) - penTemp - multaD - penJorn;
   const custos   = combBase + combOC + ajJ - eficG;
   const resultado= carga - custos + oppK;
 
@@ -891,6 +899,8 @@ function updateCalc(){
   set('c-serraJ', hasJ ? `<span class="val-neg">${fmt(-ajJ)}</span>` : '<span class="val-neu">não aplica</span>');
   set('c-carga',  'R$\u00a010.000,00');
   set('c-bonusA', hasA ? `<span class="val-pos">+${fmt(2000)}</span>` : '<span class="val-neu">não incluso</span>');
+  set('c-bonusB', hasB ? `<span class="val-pos">+${fmt(bonusB)}</span>` : '<span class="val-neu">não incluso</span>');
+  set('c-bonusE', hasE ? `<span class="val-pos">+${fmt(bonusE)}</span>` : '<span class="val-neu">não incluso</span>');
   set('c-perdaF', hasF ? `<span class="val-neg">−${fmt(1500)}</span>` : '<span class="val-neu">não aplica</span>');
   set('c-ptemp',  penTemp ? `<span class="val-neg">−${fmt(penTemp)}</span>` : '<span class="val-neu">não aplica</span>');
   set('c-oppK',   oppK ? `<span class="val-pos">−${fmt(oppK)} (sementes)</span>` : '<span class="val-neu">não aplica</span>');
