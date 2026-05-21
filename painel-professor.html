@@ -490,7 +490,9 @@ function calcFin(rota){
     if(orig&&dest&&orig!==dest){totalKm+=gd(orig,dest);totalMins+=pm(gt(orig,dest));}
   });
   if(keys.length){var last=keys[keys.length-1];totalKm+=gd(last,'Fazenda');totalMins+=pm(gt(last,'Fazenda'));}
-  var combBase=totalKm*2.5,combOC=combBase*0.15;
+  var hasC=keys.indexOf('C')>=0,descontoC=0;
+  if(hasC){var ci=keys.indexOf('C');var oC=ci===0?'Fazenda':keys[ci-1];var dC=ci<keys.length-1?keys[ci+1]:'Fazenda';descontoC=(gd(oC,'C')+gd('C',dC))*2.5*0.20;}
+  var combBase=totalKm*2.5-descontoC,combOC=combBase*0.15;
   var hasJ=keys.indexOf('J')>=0,ajJ=0;
   if(hasJ){var ji=keys.indexOf('J');var oJ=ji===0?'Fazenda':keys[ji-1];var dJ=ji<keys.length-1?keys[ji+1]:'Fazenda';ajJ=(gd(oJ,'J')+gd('J',dJ))*2.5*0.30*1.15;}
   var hasA=keys.indexOf('A')>=0,hasF=keys.indexOf('F')>=0,hasG=keys.indexOf('G')>=0;
@@ -499,7 +501,7 @@ function calcFin(rota){
   var oppK=(hasK&&kPos<3)?300:0,multaD=hasD?500:0,eficG=hasG?500:0;
   var carga=10000+(hasA?2000:0)-(hasF?1500:0)-penTemp-multaD-penJorn;
   var resultado=carga-(combBase+combOC+ajJ-eficG)+oppK;
-  return{totalKm:totalKm,totalMins:totalMins,combBase:combBase,combOC:combOC,ajJ:ajJ,hasA:hasA,hasF:hasF,hasG:hasG,hasD:hasD,hasK:hasK,kPos:kPos,penTemp:penTemp,penJorn:penJorn,oppK:oppK,multaD:multaD,eficG:eficG,resultado:resultado,keys:keys};
+  return{totalKm:totalKm,totalMins:totalMins,combBase:combBase,combOC:combOC,ajJ:ajJ,descontoC:descontoC,hasA:hasA,hasF:hasF,hasG:hasG,hasD:hasD,hasK:hasK,hasC:hasC,kPos:kPos,penTemp:penTemp,penJorn:penJorn,oppK:oppK,multaD:multaD,eficG:eficG,resultado:resultado,keys:keys};
 }
 
 // ═══════════════════════════════════════════════
@@ -527,7 +529,7 @@ function renderPanel(){
     '<div class="stat g"><div class="sv">'+entregues+'</div><div class="sl">Entregues</div></div>'+
     '<div class="stat o"><div class="sv">'+(total-entregues)+'</div><div class="sl">Pendentes</div></div>'+
     '<div class="stat b"><div class="sv">'+(resultados.length?fr(melhor):'---')+'</div><div class="sl">Melhor resultado</div></div>'+
-    '<div class="stat y"><div class="sv">'+(resultados.length?fr(media):'---')+'</div><div class="sl">Media turma</div></div>';
+    '<div class="stat y"><div class="sv">'+(resultados.length?fr(media):'---')+'</div><div class="sl">Media ('+resultados.length+' grupos)</div></div>';
   document.getElementById('filterBar').innerHTML=
     '<span class="flabel">Filtrar:</span>'+
     '<select id="fCurso" onchange="renderPanel()"><option value="">Todos os cursos</option><option'+(fCurso==='Agronomia'?' selected':'')+'>Agronomia</option><option'+(fCurso==='Engenharia Agr\u00edcola e Ambiental'?' selected':'')+'>Engenharia Agr\u00edcola e Ambiental</option><option'+(fCurso==='Zootecnia'?' selected':'')+'>Zootecnia</option></select>'+
@@ -597,7 +599,8 @@ function renderBody(row,rota,fin){
   var pc=pct>100?'#c23b3b':pct>85?'#c45e1a':'#2d5c34';
   var rc=fin.resultado>0?'pos':'neg';
   var calcRows=[
-    ['Combustivel base',fr(fin.combBase),'vm'],
+    ['Combustivel bruto (sem desconto)',fr(fin.combBase+fin.descontoC),'vm'],
+    ['Desconto Diesel Cidade C (-20%)',fin.hasC?'-'+fr(fin.descontoC):'nao incluso',fin.hasC?'vp':'vne'],
     ['+15% Onda de Calor',fr(fin.combOC),'vn'],
     ['Ajuste Serra (J)',fin.ajJ?fr(-fin.ajJ):'nao aplica',fin.ajJ?'vn':'vne'],
     ['Valor da Carga Base','R$\u00a010.000,00','vm'],
@@ -620,11 +623,11 @@ function renderBody(row,rota,fin){
     '<div class="dg dg3" style="margin-bottom:14px">'+
     '<div class="db '+(pct>100?'danger':pct>85?'warn':'hi')+'"><div class="db-lbl">Distancia Total</div><div class="db-val big '+(pct>100?'neg':'')+'">'+fin.totalKm+' km</div></div>'+
     '<div class="db '+(pct>100?'danger':pct>85?'warn':'hi')+'"><div class="db-lbl">Tempo Total</div><div class="db-val big '+(pct>100?'neg':'')+'">'+hm(fin.totalMins)+'</div><div class="prog"><div class="prog-fill" style="width:'+Math.min(100,pct)+'%;background:'+pc+'"></div></div><div style="font-size:10px;color:var(--ink4);margin-top:4px">'+pct+'% da jornada \u00b7 Retorno ~'+hm(5*60+fin.totalMins)+'</div></div>'+
-    '<div class="db '+(fin.resultado>0?'hi':fin.resultado<0?'danger':'')+'"><div class="db-lbl">Resultado Estimado</div><div class="db-val big '+rc+'">'+(fin.totalKm?fr(fin.resultado):'---')+'</div></div></div>'+
+    '<div class="db '+(fin.resultado>0?'hi':fin.resultado<0?'danger':'')+'"><div class="db-lbl">Lucro Liquido Estimado</div><div class="db-val big '+rc+'">'+(fin.totalKm?fr(fin.resultado):'---')+'</div></div></div>'+
     '<div style="overflow-x:auto;border-radius:var(--radius);border:1px solid var(--surface3);margin-bottom:18px"><table class="rt"><thead><tr><th>#</th><th>Origem</th><th>Destino</th><th>Km</th><th>Tempo</th><th>Chegada (05:00h)</th><th>Justificativa</th></tr></thead><tbody>'+(rotaRows||'<tr><td colspan="7" style="text-align:center;color:var(--ink4);padding:20px">Roteiro nao preenchido</td></tr>')+'</tbody></table></div>'+
     '<div class="dg dg1"><div class="db"><div class="db-lbl">Justificativa Geral das Cidades</div><div class="db-val">'+esc(row.just_cidades||'---')+'</div></div></div>'+
     '<div class="slabel">Calculo Financeiro</div>'+
-    '<div class="dg dg2"><div class="db"><div class="db-lbl">Calculo Automatico (referencia)</div><table class="ct"><thead><tr><th>Item</th><th style="text-align:right">Valor</th></tr></thead><tbody>'+calcRows+'</tbody><tr class="total"><td><strong>Resultado Estimado</strong></td><td style="text-align:right" class="'+rc+'"><strong>'+(fin.totalKm?fr(fin.resultado):'---')+'</strong></td></tr></table></div><div class="db"><div class="db-lbl">Memoria de Calculo do Grupo</div><div class="db-val mono">'+esc(row.memoria||'Nao preenchida')+'</div></div></div>'+
+    '<div class="dg dg2"><div class="db"><div class="db-lbl">Calculo Automatico (referencia)</div><table class="ct"><thead><tr><th>Item</th><th style="text-align:right">Valor</th></tr></thead><tbody>'+calcRows+'</tbody><tr class="total"><td><strong>Lucro Liquido Estimado</strong></td><td style="text-align:right" class="'+rc+'"><strong>'+(fin.totalKm?fr(fin.resultado):'---')+'</strong></td></tr></table></div><div class="db"><div class="db-lbl">Memoria de Calculo do Grupo</div><div class="db-val mono">'+esc(row.memoria||'Nao preenchida')+'</div></div></div>'+
     '<div class="slabel">Analise de Perecibilidade</div>'+
     '<div class="dg dg2"><div class="db"><div class="db-lbl">&#127807; Tilapia Fresca</div><div class="db-val">'+esc(row.tilap||'---')+'</div></div><div class="db"><div class="db-lbl">&#127807; Hortalicas Folhosas</div><div class="db-val">'+esc(row.hortalica||'---')+'</div></div></div>'+
     '<div class="dg dg2"><div class="db"><div class="db-lbl">&#127818; Frutas de Epoca</div><div class="db-val">'+esc(row.frutas||'---')+'</div></div><div class="db info"><div class="db-lbl">&#9851; Zootecnia / Economia Circular</div><div class="db-val">'+esc(row.zootecnia||'---')+'</div></div></div>'+

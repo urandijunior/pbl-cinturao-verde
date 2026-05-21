@@ -335,7 +335,7 @@ html,body{height:100%;font-family:var(--ff-body);color:var(--ink);background:var
       <div class="section-title">Matriz de Decisão</div>
       <div class="section-desc">Defina critérios, objetivos e justifique as 6 cidades escolhidas.</div>
       <div class="alert alert-warn"><i class="ti ti-thermometer"></i><div><strong>Onda de Calor esta semana:</strong> +15% no combustível (refrigeração). Considere isso na estratégia de rota.</div></div>
-      <div class="alert alert-danger"><i class="ti ti-clock"></i><div><strong>Jornada máxima:</strong> Retorno à fazenda até 15:00h (saída 05:00h = 10h de operação). Ultrapassar = −R$3.000.</div></div>
+      <div class="alert alert-danger"><i class="ti ti-clock"></i><div><strong>Jornada máxima:</strong> Retorno à fazenda sem hora fixa, mas respeitando a jornada máxima de 10h. Ultrapassar = −R$3.000.</div></div>
       <div class="card">
         <div class="card-hd"><div class="card-icon"><i class="ti ti-target"></i></div><div><div class="card-title">Critério e Objetivos</div></div></div>
         <div class="field">
@@ -364,8 +364,8 @@ html,body{height:100%;font-family:var(--ff-body);color:var(--ink);background:var
     <!-- ── S3 ROTEIRO ── -->
     <div class="section" id="sec2">
       <div class="section-title">Roteiro de Entrega</div>
-      <div class="section-desc">Defina a ordem de visita. Caminhão sai às 05:00h da fazenda. Retorno obrigatório até 15:00h (10h de jornada).</div>
-      <div class="alert alert-warn"><i class="ti ti-clock"></i> <strong>Cidade D:</strong> só aceita entregas antes das 08:00h. Se for incluída, deve ser a 1ª parada (saindo 05:00h da fazenda — chegada ~05:47h, antes das 08:00h).</div>
+      <div class="section-desc">Defina a ordem de visita. Caminhão sai às 05:00h da fazenda. Sem horário fixo de retorno, mas a jornada total não pode ultrapassar 10h.</div>
+      <div class="alert alert-warn"><i class="ti ti-clock"></i> <strong>Cidade D:</strong> só aceita entregas antes das 08:00h. Se for incluída, deve ser a 1ª parada (saindo 05:00h da fazenda — chegada estimada ~05:47h, dentro do prazo).</div>
       <div class="card" style="padding:0;overflow:hidden">
         <div class="tbl-wrap">
           <table class="route-table">
@@ -810,7 +810,8 @@ function updateRouteCalc(){
 // ═══════════════════════════════════════════════
 function buildCalcTable(){
   const rows = [
-    ['c-comb',   'Combustível Base',           'Distância total × R$2,50',                           '—'],
+    ['c-comb',   'Combustível Bruto (sem desconto)', 'Distância total × R$2,50',  '—'],
+    ['c-desc-c', 'Desconto Diesel Cidade C',      '-20% no trecho via C (vantagem logística)', '—'],
     ['c-oc',     '+15% Onda de Calor',          'Refrigeração extra (temperatura 35°C)',               '—'],
     ['c-serraJ', 'Ajuste Serra – Cidade J',     '+30% no trecho com J',                               '—'],
     ['c-carga',  'Valor da Carga Base',          'Estimativa bruta',                                   'R$\u00a010.000,00'],
@@ -820,7 +821,7 @@ function buildCalcTable(){
     ['c-oppK',   'Oportunidade – Cidade K',      'K entre as 3 primeiras paradas: −R$300 em sementes', '—'],
     ['c-multaD', 'Multa – Cidade D',             '−R$500 se chegada após 08:00h',                     '—'],
     ['c-eficG',  'Eficiência – Cidade G',        '−R$500 do custo total (frete retorno)',              '—'],
-    ['c-pjorn',  'Penalidade Jornada',           '−R$3.000 se retorno após 15:00h',                   '—'],
+    ['c-pjorn',  'Penalidade Jornada',           '−R$3.000 se jornada total exceder 10h',                   '—'],
   ];
   const tbody = document.getElementById('calc-tbody');
   tbody.innerHTML = rows.map(([id,name,cond,val])=>`
@@ -829,7 +830,7 @@ function buildCalcTable(){
       <td style="color:var(--ink3);font-size:12px">${cond}</td>
       <td style="text-align:right" id="${id}">${val}</td>
     </tr>`).join('');
-  tbody.innerHTML += `<tr class="row-total"><td colspan="2"><strong>RESULTADO FINANCEIRO ESTIMADO</strong></td><td style="text-align:right" id="c-result">—</td></tr>`;
+  tbody.innerHTML += `<tr class="row-total"><td colspan="2"><strong>LUCRO LÍQUIDO ESTIMADO (receita − todos os custos)</strong></td><td style="text-align:right" id="c-result">—</td></tr>`;
 }
 
 function updateCalc(){
@@ -848,7 +849,15 @@ function updateCalc(){
   const lastKey = cityKey(dests[5]);
   if(lastKey){ totalKm+=getDist(lastKey,'Fazenda'); totalMins+=parseMins(getTime(lastKey,'Fazenda')); }
 
-  const combBase = totalKm*2.5;
+  const hasC = cityKeys.includes('C');
+  let descontoC = 0;
+  if(hasC){
+    const ci = cityKeys.indexOf('C');
+    const oC = ci===0?'Fazenda':cityKeys[ci-1];
+    const dC = ci<cityKeys.length-1?cityKeys[ci+1]:'Fazenda';
+    descontoC = ((DIST[oC]&&DIST[oC]['C']||0)+(DIST['C']&&DIST['C'][dC]||0))*2.5*0.20;
+  }
+  const combBase = totalKm*2.5 - descontoC;
   const combOC   = combBase*0.15;
   const hasJ=keys.includes('J');
   let ajJ=0;
@@ -876,7 +885,8 @@ function updateCalc(){
 
   const set=(id,v,cls)=>{ const el=document.getElementById(id); if(el){el.innerHTML=v; if(cls){el.className=cls;}} };
 
-  set('c-comb',   fmt(combBase));
+  set('c-comb',   fmt(combBase+descontoC)); // mostra o bruto antes do desconto
+  set('c-desc-c',  hasC ? '<span class="val-pos">-'+fmt(descontoC)+'</span>' : '<span class="val-neu">não incluso</span>');
   set('c-oc',     `<span class="val-neg">${fmt(combOC)}</span>`);
   set('c-serraJ', hasJ ? `<span class="val-neg">${fmt(-ajJ)}</span>` : '<span class="val-neu">não aplica</span>');
   set('c-carga',  'R$\u00a010.000,00');
@@ -994,10 +1004,23 @@ function submitForm(){
   const d = loadGroup(currentGroup);
   const f = d.data;
   const issues=[];
-  if(!f.membros?.length)                    issues.push('Identifique ao menos 1 membro');
-  if(!f.criterio)                           issues.push('Selecione o critério principal');
-  if(f.rota?.filter(r=>r.destino).length<6) issues.push('Defina as 6 cidades do roteiro');
-  if(issues.length){ toast(issues[0], true); return; }
+  if(!f.membros?.length)                    issues.push('Identifique ao menos 1 membro do grupo');
+  if(!f.criterio)                           issues.push('Selecione o critério principal de decisão');
+  if(f.rota?.filter(r=>r.destino).length<6) issues.push('Defina as 6 cidades no Roteiro');
+  function contarPalavras(t){ return (t||'').trim().split(/\s+/).filter(w=>w.length>0).length; }
+  const discursivas=[
+    [f.objetivo,       'Objetivo principal (mín. 10 palavras)'],
+    [f.metas,          'Metas definidas (mín. 10 palavras)'],
+    [f.onda_resp,      'Resposta Onda de Calor (mín. 10 palavras)'],
+    [f.just_cidades,   'Justificativa das cidades (mín. 10 palavras)'],
+    [f.memoria,        'Memória de cálculo (mín. 10 palavras)'],
+    [f.tilap,          'Análise da tilápia (mín. 10 palavras)'],
+    [f.hortalica,      'Análise das hortaliças (mín. 10 palavras)'],
+    [f.frutas,         'Análise das frutas (mín. 10 palavras)'],
+    [f.zootecnia,      'Zootecnia/Economia circular (mín. 10 palavras)'],
+  ];
+  discursivas.forEach(function([txt,nome]){ if(contarPalavras(txt)<10) issues.push(nome+' está muito curto'); });
+  if(issues.length){ toast('⚠ '+issues[0], true); return; }
 
   const btn = document.getElementById('btn-submit');
   btn.disabled = true;
