@@ -813,7 +813,7 @@ function buildCalcTable(){
   const rows = [
     ['c-comb',   'Combustível Bruto (sem desconto)', 'Distância total × R$2,50',  '—'],
     ['c-desc-c', 'Desconto Diesel Cidade C',      '-20% no trecho via C (vantagem logística)', '—'],
-    ['c-oc',     '+15% Onda de Calor',          'Refrigeração extra (temperatura 35°C)',               '—'],
+    ['c-oc',     '+15% Onda de Calor (diurno)', 'Proporcional às horas entre 05:00h e 18:00h',         '—'],
     ['c-serraJ', 'Ajuste Serra – Cidade J',     '+30% no trecho com J',                               '—'],
     ['c-carga',  'Valor da Carga Base',          'Estimativa bruta',                                   'R$\u00a010.000,00'],
     ['c-bonusA', 'Bônus Cidade A',               '+R$2.000 se peixe entregue lá',                     '—'],
@@ -861,7 +861,37 @@ function updateCalc(){
     descontoC = ((DIST[oC]&&DIST[oC]['C']||0)+(DIST['C']&&DIST['C'][dC]||0))*2.5*0.20;
   }
   const combBase = totalKm*2.5 - descontoC;
-  const combOC   = combBase*0.15;
+
+  // Onda de Calor proporcional: +15% só nas horas diurnas (05:00-18:00)
+  // Calcula trecho a trecho com base no horário acumulado de saída
+  const DIURNO_INI = 5*60;   // 05:00 = 300 min
+  const DIURNO_FIM = 18*60;  // 18:00 = 1080 min
+  function fracaoDiurna(saidaMins, duracaoMins) {
+    if(!duracaoMins) return 0;
+    const dIni = Math.max(saidaMins, DIURNO_INI);
+    const dFim = Math.min(saidaMins + duracaoMins, DIURNO_FIM);
+    return Math.max(0, dFim - dIni) / duracaoMins;
+  }
+  let combOC = 0;
+  let acumMins = 5*60; // parte às 05:00
+  for(let i=0;i<6;i++){
+    const orig = i===0?'Fazenda':cityKeys[i-1];
+    const dest = cityKeys[i];
+    if(!orig||!dest||orig===dest) continue;
+    const km  = (DIST[orig]&&DIST[orig][dest])||0;
+    const dur = parseMins((TIMES[orig]&&TIMES[orig][dest])||'00:00');
+    const fd  = fracaoDiurna(acumMins, dur);
+    combOC += km * 2.50 * 0.15 * fd;
+    acumMins += dur;
+  }
+  // retorno à fazenda
+  if(cityKeys[5]){
+    const km  = (DIST[cityKeys[5]]&&DIST[cityKeys[5]]['Fazenda'])||0;
+    const dur = parseMins((TIMES[cityKeys[5]]&&TIMES[cityKeys[5]]['Fazenda'])||'00:00');
+    const fd  = fracaoDiurna(acumMins, dur);
+    combOC += km * 2.50 * 0.15 * fd;
+  }
+  combOC = Math.round(combOC * 100) / 100;
   const hasJ=keys.includes('J');
   let ajJ=0;
   if(hasJ){
@@ -895,7 +925,7 @@ function updateCalc(){
 
   set('c-comb',   fmt(combBase+descontoC)); // mostra o bruto antes do desconto
   set('c-desc-c',  hasC ? '<span class="val-pos">-'+fmt(descontoC)+'</span>' : '<span class="val-neu">não incluso</span>');
-  set('c-oc',     `<span class="val-neg">${fmt(combOC)}</span>`);
+  set('c-oc',     `<span class="val-neg">${fmt(combOC)}</span> <span style="font-size:11px;color:var(--ink3)">(proporcional ao período diurno)</span>`);
   set('c-serraJ', hasJ ? `<span class="val-neg">${fmt(-ajJ)}</span>` : '<span class="val-neu">não aplica</span>');
   set('c-carga',  'R$\u00a010.000,00');
   set('c-bonusA', hasA ? `<span class="val-pos">+${fmt(2000)}</span>` : '<span class="val-neu">não incluso</span>');

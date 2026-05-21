@@ -492,7 +492,30 @@ function calcFin(rota){
   if(keys.length){var last=keys[keys.length-1];totalKm+=gd(last,'Fazenda');totalMins+=pm(gt(last,'Fazenda'));}
   var hasC=keys.indexOf('C')>=0,descontoC=0;
   if(hasC){var ci=keys.indexOf('C');var oC=ci===0?'Fazenda':keys[ci-1];var dC=ci<keys.length-1?keys[ci+1]:'Fazenda';descontoC=(gd(oC,'C')+gd('C',dC))*2.5*0.20;}
-  var combBase=totalKm*2.5-descontoC,combOC=combBase*0.15;
+  var combBase=totalKm*2.5-descontoC;
+  // Onda de Calor proporcional: +15% apenas nas horas diurnas (05:00-18:00)
+  var DIUR_INI=300, DIUR_FIM=1080; // 05:00 e 18:00 em minutos
+  function fracDiurna(saidaM, durM){
+    if(!durM) return 0;
+    var dI=Math.max(saidaM,DIUR_INI), dF=Math.min(saidaM+durM,DIUR_FIM);
+    return Math.max(0,dF-dI)/durM;
+  }
+  function pmLocal(t){if(!t||t==='---')return 0;var p=String(t).split(':');return parseInt(p[0]||0)*60+parseInt(p[1]||0);}
+  var combOC=0, acumM=300; // parte 05:00
+  rota.forEach(function(r,i){
+    var orig=i===0?'Fazenda':ck(rota[i-1].destino);
+    var dest=ck(r.destino);
+    if(!orig||!dest||orig===dest) return;
+    var km=gd(orig,dest), dur=pmLocal(gt(orig,dest));
+    combOC += km * 2.50 * 0.15 * fracDiurna(acumM, dur);
+    acumM  += dur;
+  });
+  if(keys.length>0){
+    var last=keys[keys.length-1];
+    var km=gd(last,'Fazenda'), dur=pmLocal(gt(last,'Fazenda'));
+    combOC += km * 2.50 * 0.15 * fracDiurna(acumM, dur);
+  }
+  combOC=Math.round(combOC*100)/100;
   var hasJ=keys.indexOf('J')>=0,ajJ=0;
   if(hasJ){var ji=keys.indexOf('J');var oJ=ji===0?'Fazenda':keys[ji-1];var dJ=ji<keys.length-1?keys[ji+1]:'Fazenda';ajJ=(gd(oJ,'J')+gd('J',dJ))*2.5*0.30*1.15;}
   var hasA=keys.indexOf('A')>=0,hasB=keys.indexOf('B')>=0,hasE=keys.indexOf('E')>=0;
@@ -603,7 +626,7 @@ function renderBody(row,rota,fin){
   var calcRows=[
     ['Combustivel bruto (sem desconto)',fr(fin.combBase+fin.descontoC),'vm'],
     ['Desconto Diesel Cidade C (-20%)',fin.hasC?'-'+fr(fin.descontoC):'nao incluso',fin.hasC?'vp':'vne'],
-    ['+15% Onda de Calor',fr(fin.combOC),'vn'],
+    ['+15% Onda de Calor (horas diurnas)',fr(fin.combOC),'vn'],
     ['Ajuste Serra (J)',fin.ajJ?fr(-fin.ajJ):'nao aplica',fin.ajJ?'vn':'vne'],
     ['Valor da Carga Base','R$\u00a010.000,00','vm'],
     ['Bonus Cidade A',fin.hasA?'+'+fr(2000):'nao incluso',fin.hasA?'vp':'vne'],
