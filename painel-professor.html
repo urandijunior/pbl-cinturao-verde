@@ -3,710 +3,998 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Painel de Correcao -- PBL 2026</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<title>Painel do Professor — Cinturão Verde ao Prato</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --ink:#1a1a18;--ink2:#3d3d38;--ink3:#7a7a72;--ink4:#b0b0a8;
-  --page:#f5f3ee;--surface:#fff;--surface2:#f0ede6;--surface3:#e8e4db;
-  --g1:#1e3d22;--g2:#2d5c34;--g3:#4a8c55;--g4:#c2dfc6;--g5:#eaf3eb;
-  --o1:#7a3a10;--o2:#c45e1a;--o3:#f9d4b0;--o4:#fdf3ea;
-  --r1:#6b1f1f;--r2:#c23b3b;--r3:#f5c6c6;--r4:#fdf0f0;
-  --b1:#1a2e4a;--b2:#2a5298;--b3:#c2d4f0;--b4:#eef3fc;
-  --y1:#5a4200;--y2:#c8920a;--y3:#fde9a0;--y4:#fffbee;
-  --ff-head:'Fraunces',serif;--ff-body:'DM Sans',sans-serif;--ff-mono:'DM Mono',monospace;
-  --radius:8px;--radius-lg:14px;--shadow:0 2px 12px rgba(0,0,0,.08);--shadow-lg:0 8px 32px rgba(0,0,0,.12);
-}
-html,body{min-height:100vh;background:var(--page);font-family:var(--ff-body);color:var(--ink);font-size:15px;line-height:1.6}
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
 
-/* HEADER */
-.header{background:var(--g1);position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.3)}
-.header-inner{max-width:1200px;margin:0 auto;padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.brand{display:flex;align-items:center;gap:12px}
-.brand-icon{width:38px;height:38px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px}
-.brand-title{font-family:var(--ff-head);font-size:18px;font-weight:600;color:#fff;letter-spacing:-.3px}
-.brand-sub{font-size:11px;color:rgba(255,255,255,.45);margin-top:1px}
-.hright{display:flex;align-items:center;gap:8px}
-.src-badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;background:rgba(255,255,255,.15);color:rgba(255,255,255,.8)}
+  :root {
+    --verde:     #1a6b3a;
+    --verde-m:   #2d8f54;
+    --verde-l:   #4db87a;
+    --terra:     #8b5e2a;
+    --ouro:      #d4a22a;
+    --vermelho:  #c0392b;
+    --azul:      #1a4a7a;
+    --cinza-f:   #0e1a12;
+    --cinza-m:   #1c2e20;
+    --cinza-l:   #2e4535;
+    --texto:     #e8f0ea;
+    --texto-m:   #9ab8a0;
+    --borda:     #3a5c42;
+    --card-bg:   #162018;
+  }
 
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:var(--radius);font-family:var(--ff-body);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .18s;white-space:nowrap}
-.btn-gw{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25)}.btn-gw:hover{background:rgba(255,255,255,.2)}
-.btn-primary{background:var(--g2);color:#fff}.btn-primary:hover{background:var(--g1)}
-.btn-outline{background:transparent;color:var(--g2);border:1.5px solid var(--g4)}.btn-outline:hover{background:var(--g5)}
-.btn-yellow{background:var(--y2);color:#fff}.btn-yellow:hover{background:var(--y1)}
-.btn-blue{background:var(--b2);color:#fff}.btn-blue:hover{background:var(--b1)}
-.btn-sm{padding:5px 12px;font-size:12px}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cinza-f);
+    color: var(--texto);
+    min-height: 100vh;
+  }
 
-/* HOME SCREEN */
-.home{min-height:calc(100vh - 60px);display:flex;align-items:center;justify-content:center;padding:32px 24px}
-.home-inner{width:100%;max-width:760px}
-.home-title{font-family:var(--ff-head);font-size:40px;font-weight:700;color:var(--g1);letter-spacing:-1px;margin-bottom:10px;line-height:1.15}
-.home-title em{font-style:italic;color:var(--g3)}
-.home-sub{font-size:14px;color:var(--ink3);margin-bottom:36px;line-height:1.7}
-.source-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
-.src-card{background:var(--surface);border:2px solid var(--surface3);border-radius:var(--radius-lg);padding:28px 24px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
-.src-card:hover{border-color:var(--g3);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
-.src-card.active{border-color:var(--g2);background:var(--g5)}
-.src-card-icon{font-size:36px;margin-bottom:14px;display:block}
-.src-card h3{font-family:var(--ff-head);font-size:20px;color:var(--g1);margin-bottom:6px}
-.src-card p{font-size:13px;color:var(--ink3);line-height:1.6}
-.src-card .tag{position:absolute;top:14px;right:14px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--g4);color:var(--g1);letter-spacing:.3px}
-.src-detail{background:var(--surface);border:1.5px solid var(--surface3);border-radius:var(--radius-lg);padding:24px;margin-bottom:16px;display:none}
-.src-detail.active{display:block;animation:fadeIn .2s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, var(--cinza-m) 0%, #0d1f10 100%);
+    border-bottom: 2px solid var(--verde);
+    padding: 20px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo { display: flex; align-items: center; gap: 14px; }
+  .logo-icon { font-size: 32px; }
+  .logo h1 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: var(--verde-l); letter-spacing: -0.5px; }
+  .logo p  { font-size: 11px; color: var(--texto-m); font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: 1px; }
+  .badge-prof { background: var(--verde); color: #fff; padding: 6px 14px; border-radius: 20px; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; }
 
-/* DROP AREA */
-.drop-area{border:2px dashed var(--g4);border-radius:var(--radius-lg);padding:32px;text-align:center;cursor:pointer;transition:all .2s;background:var(--g6,#f8fbf8)}
-.drop-area:hover,.drop-area.over{border-color:var(--g2);background:var(--g5)}
-.drop-area input{display:none}
-.drop-area h4{font-family:var(--ff-head);font-size:18px;color:var(--g1);margin-bottom:6px}
-.drop-area p{font-size:13px;color:var(--ink3)}
-.file-list{margin-top:14px;display:flex;flex-direction:column;gap:6px}
-.file-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--surface2);border-radius:var(--radius);font-size:13px}
-.file-item .fn{color:var(--g1);font-weight:500}
-.file-item .fs{color:var(--ink4);font-size:11px}
-.file-item .rm{background:none;border:none;color:var(--r2);cursor:pointer;font-size:16px;padding:0 4px}
+  /* ── TABS ── */
+  .tabs { display: flex; gap: 4px; background: var(--cinza-m); padding: 16px 32px 0; border-bottom: 1px solid var(--borda); }
+  .tab-btn {
+    padding: 10px 20px; border: none; background: transparent;
+    color: var(--texto-m); cursor: pointer; font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 600; border-bottom: 3px solid transparent;
+    transition: all .2s; letter-spacing: .3px;
+  }
+  .tab-btn:hover { color: var(--verde-l); }
+  .tab-btn.active { color: var(--verde-l); border-bottom-color: var(--verde-l); }
 
-/* SHEETS CONFIG */
-.sheets-form .field{margin-bottom:12px}
-.sheets-form label{display:block;font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
-.sheets-form input{width:100%;padding:10px 14px;border:1.5px solid var(--surface3);border-radius:var(--radius);font-family:var(--ff-mono);font-size:13px;color:var(--ink);background:var(--surface);outline:none}
-.sheets-form input:focus{border-color:var(--g3)}
-.sheets-hint{font-size:12px;color:var(--ink3);margin-top:6px;line-height:1.6}
+  /* ── MAIN ── */
+  main { padding: 28px 32px; max-width: 1400px; margin: 0 auto; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
 
-/* LOADING */
-.loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:50vh;gap:16px}
-.spinner{width:44px;height:44px;border:3px solid var(--surface3);border-top-color:var(--g2);border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{font-family:var(--ff-head);font-size:18px;color:var(--ink3)}
+  /* ── UPLOAD AREA ── */
+  .upload-section {
+    background: var(--card-bg);
+    border: 2px dashed var(--borda);
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    transition: border-color .3s;
+    cursor: pointer;
+    margin-bottom: 24px;
+  }
+  .upload-section:hover, .upload-section.drag-over { border-color: var(--verde-l); background: #1a2e1e; }
+  .upload-icon { font-size: 48px; margin-bottom: 12px; }
+  .upload-section h3 { font-family: 'Syne', sans-serif; font-size: 18px; color: var(--verde-l); margin-bottom: 8px; }
+  .upload-section p { font-size: 13px; color: var(--texto-m); margin-bottom: 20px; }
+  .upload-section input[type=file] { display: none; }
+  .btn-upload {
+    background: var(--verde); color: #fff; border: none; padding: 12px 28px;
+    border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 14px; cursor: pointer; transition: background .2s;
+  }
+  .btn-upload:hover { background: var(--verde-m); }
 
-/* PANEL */
-.main{max-width:1200px;margin:0 auto;padding:24px}
+  /* ── FONTE SHEETS ── */
+  .sheets-section {
+    background: var(--card-bg);
+    border: 1px solid var(--borda);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+  .sheets-section h3 { font-family: 'Syne', sans-serif; font-size: 15px; color: var(--ouro); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .input-row { display: flex; gap: 12px; }
+  .input-row input {
+    flex: 1; background: #0e1a12; border: 1px solid var(--borda); color: var(--texto);
+    padding: 10px 14px; border-radius: 8px; font-family: 'DM Mono', monospace; font-size: 12px;
+  }
+  .input-row input::placeholder { color: var(--texto-m); }
+  .btn-sheets { background: var(--azul); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap; }
+  .btn-sheets:hover { background: #235a9e; }
 
-/* STATS */
-.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:24px}
-.stat{background:var(--surface);border:1px solid var(--surface3);border-radius:var(--radius-lg);padding:16px 18px;box-shadow:var(--shadow)}
-.stat .sv{font-family:var(--ff-head);font-size:32px;font-weight:700;letter-spacing:-1px;line-height:1}
-.stat .sl{font-size:11px;color:var(--ink3);margin-top:5px;font-weight:500;letter-spacing:.3px;text-transform:uppercase}
-.stat.g .sv{color:var(--g2)}.stat.o .sv{color:var(--o2)}.stat.b .sv{color:var(--b2)}.stat.y .sv{color:var(--y2)}
+  /* ── STATUS BAR ── */
+  #statusBar {
+    background: var(--cinza-m); border: 1px solid var(--borda);
+    border-radius: 10px; padding: 12px 18px; margin-bottom: 24px;
+    font-family: 'DM Mono', monospace; font-size: 12px; color: var(--texto-m);
+    display: flex; align-items: center; gap: 10px;
+  }
+  #statusBar.ok    { border-color: var(--verde-l); color: var(--verde-l); }
+  #statusBar.erro  { border-color: var(--vermelho); color: #ff6b6b; }
+  #statusBar.info  { border-color: var(--ouro); color: var(--ouro); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
 
-/* FILTER */
-.filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
-.filter-bar select,.filter-bar input[type=text]{padding:8px 12px;border:1.5px solid var(--surface3);border-radius:var(--radius);font-family:var(--ff-body);font-size:13px;color:var(--ink);background:var(--surface);outline:none}
-.filter-bar select:focus,.filter-bar input:focus{border-color:var(--g3)}
-.flabel{font-size:12px;color:var(--ink3);font-weight:500;white-space:nowrap}
+  /* ── GRUPOS GRID ── */
+  .grupos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; margin-bottom: 28px; }
+  .grupo-card {
+    background: var(--card-bg); border: 1px solid var(--borda);
+    border-radius: 14px; overflow: hidden; transition: border-color .2s;
+  }
+  .grupo-card:hover { border-color: var(--verde-m); }
+  .grupo-header {
+    background: linear-gradient(135deg, var(--cinza-l), var(--cinza-m));
+    padding: 14px 18px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .grupo-nome { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; }
+  .grupo-status { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+  .status-submetido { background: #1a4a2a; color: var(--verde-l); }
+  .status-pendente  { background: #3a2a0e; color: var(--ouro); }
+  .grupo-body { padding: 16px 18px; }
+  .info-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
+  .info-label { color: var(--texto-m); }
+  .info-val   { font-family: 'DM Mono', monospace; font-weight: 500; }
+  .info-val.pos { color: var(--verde-l); }
+  .info-val.neg { color: #ff6b6b; }
+  .info-val.warn { color: var(--ouro); }
 
-/* GROUP CARDS */
-.groups-list{display:flex;flex-direction:column;gap:14px}
-.gcard{background:var(--surface);border:1px solid var(--surface3);border-radius:var(--radius-lg);box-shadow:var(--shadow);overflow:hidden}
-.gcard-hd{display:flex;align-items:stretch;cursor:pointer;transition:background .15s;user-select:none}
-.gcard-hd:hover{background:var(--surface2)}
-.gcard-num{width:56px;min-width:56px;background:var(--g1);display:flex;align-items:center;justify-content:center;font-family:var(--ff-head);font-size:20px;font-weight:700;color:#fff}
-.gcard-info{flex:1;padding:14px 18px;min-width:0}
-.gcard-name{font-family:var(--ff-head);font-size:17px;font-weight:700;color:var(--g1);margin-bottom:3px}
-.gcard-meta{font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.gcard-badges{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
-.gcard-right{display:flex;align-items:center;gap:16px;padding:14px 20px;border-left:1px solid var(--surface3)}
-.gcard-rv{text-align:right}
-.gcard-rv .rv{font-family:var(--ff-head);font-size:20px;font-weight:700}
-.gcard-rv .rl{font-size:10px;color:var(--ink4);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
-.gcard-rv.pos .rv{color:var(--g2)}.gcard-rv.neg .rv{color:var(--r2)}.gcard-rv.neu .rv{color:var(--ink3)}
-.gcard-chevron{display:flex;align-items:center;padding:0 16px;font-size:18px;color:var(--ink4);transition:transform .2s}
-.gcard-hd.open .gcard-chevron{transform:rotate(180deg)}
-.rs{background:var(--surface2);border-top:1px solid var(--surface3);padding:10px 18px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.rs-node{display:inline-flex;align-items:center;padding:4px 10px;border-radius:20px;font-family:var(--ff-mono);font-size:11px;font-weight:500;white-space:nowrap}
-.rs-node.faz{background:var(--g4);color:var(--g1)}.rs-node.city{background:var(--g1);color:#fff}
-.rs-node.warn{background:var(--o2);color:#fff}.rs-node.danger{background:var(--r2);color:#fff}
-.rs-arr{color:var(--ink4);font-size:12px}
-.gcard-body{display:none;border-top:1.5px solid var(--surface3);padding:24px}
-.gcard-body.open{display:block;animation:fadeIn .2s ease}
+  .alertas { margin-top: 10px; }
+  .alerta-tag {
+    display: inline-block; margin: 3px 3px 0 0;
+    padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  }
+  .alerta-pen  { background: #3a0e0e; color: #ff8080; }
+  .alerta-bon  { background: #0e3a1a; color: var(--verde-l); }
+  .alerta-warn { background: #3a2a0e; color: var(--ouro); }
 
-/* DETAIL */
-.dg{display:grid;gap:14px;margin-bottom:18px}
-.dg2{grid-template-columns:1fr 1fr}.dg3{grid-template-columns:1fr 1fr 1fr}.dg1{grid-template-columns:1fr}
-.db{background:var(--page);border:1px solid var(--surface3);border-radius:var(--radius);padding:13px 15px}
-.db.hi{background:var(--g5);border-color:var(--g4)}.db.warn{background:var(--o4);border-color:var(--o3)}
-.db.danger{background:var(--r4);border-color:var(--r3)}.db.info{background:var(--b4);border-color:var(--b3)}
-.db-lbl{font-size:10px;font-weight:600;color:var(--ink3);letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px}
-.db-val{font-size:13px;color:var(--ink);line-height:1.65}
-.db-val.mono{font-family:var(--ff-mono);font-size:12px;background:var(--surface);border:1px solid var(--surface3);border-radius:6px;padding:10px 12px;white-space:pre-wrap;line-height:1.8}
-.db-val.big{font-family:var(--ff-head);font-size:26px;font-weight:700}
-.db-val.pos{color:var(--g2)}.db-val.neg{color:var(--r2)}
-.slabel{font-family:var(--ff-head);font-size:15px;font-weight:600;color:var(--g1);margin:20px 0 12px;display:flex;align-items:center;gap:10px}
-.slabel::after{content:'';flex:1;height:1px;background:var(--surface3)}
+  .nota-final {
+    margin-top: 14px; padding: 12px; background: #0e1a12;
+    border-radius: 10px; text-align: center;
+  }
+  .nota-num { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; }
+  .nota-label { font-size: 11px; color: var(--texto-m); margin-top: 2px; }
 
-/* TABLES */
-.rt{width:100%;border-collapse:collapse;font-size:13px}
-.rt th{background:var(--g1);color:#fff;padding:9px 12px;text-align:left;font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
-.rt td{padding:9px 12px;border-bottom:1px solid var(--surface3);vertical-align:top}
-.rt tbody tr:last-child td{border-bottom:none}
-.rt tbody tr:nth-child(even) td{background:var(--surface2)}
-.tdnum{font-family:var(--ff-mono);color:var(--g2);font-weight:500;width:30px}
-.tdcity{font-weight:500;color:var(--g1)}.tdkm,.tdtime{font-family:var(--ff-mono);color:var(--ink3);white-space:nowrap;width:80px}
-.tdjust{color:var(--ink2);font-size:12px}
-.ct{width:100%;border-collapse:collapse;font-size:13px}
-.ct th{padding:9px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--ink3);border-bottom:1.5px solid var(--surface3);letter-spacing:.5px;text-transform:uppercase}
-.ct td{padding:9px 12px;border-bottom:1px solid var(--surface3)}
-.ct .total td{font-weight:700;background:var(--g5);color:var(--g1);border-top:2px solid var(--g3)}
-.vp{color:var(--g2);font-family:var(--ff-mono);font-size:12px}.vn{color:var(--r2);font-family:var(--ff-mono);font-size:12px}
-.vne{color:var(--ink4);font-size:12px}.vm{font-family:var(--ff-mono);font-size:12px}
+  /* ── RUBRICA ── */
+  .rubrica-inputs { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+  .rubrica-row { display: flex; align-items: center; gap: 10px; }
+  .rubrica-row label { flex: 1; font-size: 12px; color: var(--texto-m); }
+  .rubrica-row input[type=number] {
+    width: 70px; background: #0e1a12; border: 1px solid var(--borda);
+    color: var(--texto); padding: 6px 10px; border-radius: 6px;
+    font-family: 'DM Mono', monospace; font-size: 13px; text-align: center;
+  }
+  .rubrica-row .pts-max { font-size: 11px; color: var(--texto-m); }
 
-/* BADGES */
-.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
-.bg{background:var(--g4);color:var(--g1)}.bo{background:var(--o3);color:var(--o1)}
-.br{background:var(--r3);color:var(--r1)}.bb{background:var(--b3);color:var(--b1)}.by{background:var(--y3);color:var(--y1)}
+  /* ── RESUMO TURMA ── */
+  .resumo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+  .resumo-card {
+    background: var(--card-bg); border: 1px solid var(--borda);
+    border-radius: 12px; padding: 18px; text-align: center;
+  }
+  .resumo-num  { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--verde-l); }
+  .resumo-label { font-size: 12px; color: var(--texto-m); margin-top: 4px; }
 
-/* NOTA */
-.nota-box{background:var(--y4);border:1.5px solid var(--y3);border-radius:var(--radius-lg);padding:18px 20px;margin-top:6px}
-.nota-box h4{font-family:var(--ff-head);font-size:15px;color:var(--y1);margin-bottom:14px}
-.nota-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
-.nota-item label{display:block;font-size:10px;font-weight:600;color:var(--ink3);letter-spacing:.4px;text-transform:uppercase;margin-bottom:4px}
-.nota-item input[type=number]{width:100%;padding:8px;border:1.5px solid var(--y3);border-radius:var(--radius);font-family:var(--ff-mono);font-size:18px;font-weight:500;color:var(--y1);background:var(--surface);outline:none;text-align:center}
-.nota-item input:focus{border-color:var(--y2)}
-.nmax{font-size:10px;color:var(--ink4);text-align:center;margin-top:2px}
-.nota-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--y3);flex-wrap:wrap;gap:12px}
-.nota-total{font-family:var(--ff-head);font-size:30px;font-weight:700;color:var(--y1)}
-.nota-total-label{font-size:11px;color:var(--ink3)}
-.nota-actions{display:flex;align-items:center;gap:10px}
-.nota-saved{font-size:12px;color:var(--g2);opacity:0;transition:opacity .3s}.nota-saved.show{opacity:1}
-.nota-comment{margin-top:12px}
-.nota-comment label{display:block;font-size:10px;font-weight:600;color:var(--ink3);letter-spacing:.4px;text-transform:uppercase;margin-bottom:5px}
-.nota-comment textarea{width:100%;padding:9px 12px;border:1.5px solid var(--y3);border-radius:var(--radius);font-family:var(--ff-body);font-size:13px;color:var(--ink);background:var(--surface);outline:none;resize:vertical;min-height:68px}
-.nota-comment textarea:focus{border-color:var(--y2)}
+  /* ── TABELA COMPARATIVA ── */
+  .table-wrap { overflow-x: auto; margin-bottom: 28px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--cinza-l); color: var(--texto-m); padding: 10px 14px; text-align: left; font-family: 'DM Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; border-bottom: 2px solid var(--borda); }
+  td { padding: 10px 14px; border-bottom: 1px solid #1c2e20; }
+  tr:hover td { background: #1a2e1e; }
+  .td-mono { font-family: 'DM Mono', monospace; }
 
-/* MISC */
-.prog{height:5px;background:var(--surface3);border-radius:3px;overflow:hidden;margin-top:8px}
-.prog-fill{height:100%;border-radius:3px;transition:width .4s}
-.alert{padding:10px 14px;border-radius:var(--radius);font-size:13px;line-height:1.6;display:flex;gap:8px;margin-bottom:12px}
-.alert-w{background:var(--o4);border:1px solid var(--o3);color:var(--o1)}
-.alert-d{background:var(--r4);border:1px solid var(--r3);color:var(--r1)}
-.alert-g{background:var(--g5);border:1px solid var(--g4);color:var(--g1)}
-.alert-b{background:var(--b4);border:1px solid var(--b3);color:var(--b1)}
-.empty{text-align:center;padding:60px 24px;color:var(--ink3)}
-.empty-icon{font-size:48px;margin-bottom:16px;opacity:.4}
-.empty h3{font-family:var(--ff-head);font-size:22px;color:var(--ink2);margin-bottom:8px}
-.empty p{font-size:13px;line-height:1.7}
-@media(max-width:768px){.dg2,.dg3,.source-cards{grid-template-columns:1fr}.gcard-right{display:none}.main{padding:16px 12px}.home{padding:20px 16px}.home-title{font-size:28px}}
+  /* ── BTN EXPORTAR ── */
+  .actions-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+  .btn-action {
+    padding: 10px 20px; border: 1px solid var(--borda); background: var(--cinza-m);
+    color: var(--texto); border-radius: 8px; cursor: pointer; font-size: 13px;
+    font-family: 'Syne', sans-serif; font-weight: 600; transition: all .2s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .btn-action:hover { border-color: var(--verde-l); color: var(--verde-l); }
+  .btn-action.primary { background: var(--verde); border-color: var(--verde); }
+  .btn-action.primary:hover { background: var(--verde-m); }
+
+  /* ── DISCURSIVAS ── */
+  .disc-section { margin-top: 12px; }
+  .disc-campo {
+    background: #0e1a12; border: 1px solid var(--borda); border-radius: 8px;
+    padding: 12px; margin-bottom: 8px;
+  }
+  .disc-campo h5 { font-size: 11px; color: var(--ouro); margin-bottom: 6px; font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .5px; }
+  .disc-campo p  { font-size: 12px; color: var(--texto); line-height: 1.6; }
+  .disc-campo .word-count { font-size: 10px; color: var(--texto-m); margin-top: 4px; font-family: 'DM Mono', monospace; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--texto-m); }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state h3 { font-family: 'Syne', sans-serif; font-size: 16px; margin-bottom: 8px; }
+
+  /* ── DETALHES MODAL ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,.8); z-index: 200;
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: var(--cinza-m); border: 1px solid var(--borda);
+    border-radius: 16px; width: 90%; max-width: 700px; max-height: 85vh;
+    overflow-y: auto; padding: 28px;
+  }
+  .modal-close { float: right; background: none; border: none; color: var(--texto-m); font-size: 24px; cursor: pointer; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--cinza-m); }
+  ::-webkit-scrollbar-thumb { background: var(--borda); border-radius: 3px; }
+
+  .sec-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+  .sec-sub   { font-size: 13px; color: var(--texto-m); margin-bottom: 24px; }
+  hr { border: none; border-top: 1px solid var(--borda); margin: 24px 0; }
+
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-family: 'DM Mono', monospace; }
+  .pill-verde { background: #1a4a2a; color: var(--verde-l); }
+  .pill-ouro  { background: #3a2a0e; color: var(--ouro); }
+  .pill-red   { background: #3a0e0e; color: #ff8080; }
 </style>
 </head>
 <body>
 
-<header class="header">
-  <div class="header-inner">
-    <div class="brand">
-      <div class="brand-icon">&#127807;</div>
-      <div>
-        <div class="brand-title">Painel de Correcao -- PBL 2026</div>
-        <div class="brand-sub">Cinturao Verde ao Prato &middot; ICAA</div>
-      </div>
-    </div>
-    <div class="hright">
-      <span class="src-badge" id="srcBadge" style="display:none"></span>
-      <button class="btn btn-gw btn-sm" id="btnHome" onclick="voltarHome()" style="display:none">&#8617; Trocar fonte</button>
-      <button class="btn btn-gw btn-sm" id="btnReload" onclick="recarregar()" style="display:none">&#8635; Atualizar</button>
-      <button class="btn btn-gw btn-sm" onclick="exportarNotas()">&#8681; Exportar notas CSV</button>
+<header>
+  <div class="logo">
+    <span class="logo-icon">🌿</span>
+    <div>
+      <h1>Painel do Professor</h1>
+      <p>PBL — Logística Integrada · Cinturão Verde ao Prato · ICAA 2026</p>
     </div>
   </div>
+  <span class="badge-prof">🔒 Acesso Restrito</span>
 </header>
 
-<!-- HOME -->
-<div id="homeScreen">
-  <div class="home">
-    <div class="home-inner">
-      <div class="home-title">Corrija os <em>PBLs</em><br>com clareza</div>
-      <div class="home-sub">Escolha como deseja carregar as respostas dos grupos. Voce pode usar as duas opcoes simultaneamente.</div>
-
-      <div class="source-cards">
-        <!-- GOOGLE SHEETS -->
-        <div class="src-card" id="cardSheets" onclick="selecionarFonte('sheets')">
-          <div class="tag">RECOMENDADO</div>
-          <span class="src-card-icon">&#128202;</span>
-          <h3>Google Sheets</h3>
-          <p>Le as respostas diretamente da planilha em tempo real. Sempre atualizado.</p>
-        </div>
-        <!-- JSON UPLOAD -->
-        <div class="src-card" id="cardJson" onclick="selecionarFonte('json')">
-          <span class="src-card-icon">&#128193;</span>
-          <h3>Arquivos JSON</h3>
-          <p>Carregue os arquivos exportados pelo painel do professor ou pelos grupos individualmente.</p>
-        </div>
-      </div>
-
-      <!-- SHEETS DETAIL -->
-      <div class="src-detail" id="detailSheets">
-        <div class="sheets-form">
-          <div class="field">
-            <label>ID da Planilha Google Sheets</label>
-            <input type="text" id="sheetId" value="1CTMFN2eDl_YDRQ93ZtE4ntSnDFsRPQ6kMXOEWtvCin0" placeholder="Cole o ID da planilha aqui">
-            <div class="sheets-hint">O ID fica na URL da planilha entre <strong>/d/</strong> e <strong>/edit</strong>. A planilha deve estar compartilhada como "Qualquer pessoa com o link" (Leitor).</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:10px;margin-top:4px">
-          <button class="btn btn-primary" onclick="carregarSheets()">&#128202; Carregar do Sheets</button>
-          <button class="btn btn-outline btn-sm" onclick="testarConexao()">Testar conexao</button>
-        </div>
-        <div id="sheetsMsg" style="margin-top:10px;font-size:13px"></div>
-      </div>
-
-      <!-- JSON DETAIL -->
-      <div class="src-detail" id="detailJson">
-        <div class="drop-area" id="dropArea"
-          onclick="document.getElementById('fileInput').click()"
-          ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFiles(event)">
-          <div style="font-size:36px;margin-bottom:12px">&#128194;</div>
-          <h4>Arraste os arquivos JSON aqui</h4>
-          <p>Aceita <strong>PBL2026_TODOS_GRUPOS.json</strong> ou arquivos individuais de cada grupo.<br>Pode carregar varios arquivos de uma vez.</p>
-          <input type="file" id="fileInput" accept=".json" multiple onchange="processarArquivos(this.files)">
-          <div style="margin-top:14px">
-            <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();document.getElementById('fileInput').click()">&#128194; Escolher arquivos</button>
-          </div>
-        </div>
-        <div class="file-list" id="fileList"></div>
-        <div style="margin-top:14px;display:flex;gap:10px" id="jsonActions" style="display:none">
-          <button class="btn btn-primary" id="btnCarregarJson" onclick="carregarJson()" style="display:none">&#128202; Visualizar respostas</button>
-          <button class="btn btn-outline btn-sm" onclick="limparArquivos()">&#215; Limpar</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('importar')">📥 Importar Dados</button>
+  <button class="tab-btn" onclick="switchTab('grupos')">👥 Grupos</button>
+  <button class="tab-btn" onclick="switchTab('comparativo')">📊 Comparativo</button>
+  <button class="tab-btn" onclick="switchTab('notas')">🎓 Notas Finais</button>
 </div>
 
-<!-- PANEL -->
-<div id="panelScreen" style="display:none">
-  <div class="main">
-    <div class="stats-row" id="statsRow"></div>
-    <div class="filter-bar" id="filterBar"></div>
-    <div class="groups-list" id="groupsList"></div>
+<main>
+
+  <!-- ══════════ TAB: IMPORTAR ══════════ -->
+  <div class="tab-panel active" id="tab-importar">
+
+    <p class="sec-title">Importar Respostas dos Grupos</p>
+    <p class="sec-sub">Faça upload do arquivo JSON exportado pelo portal do aluno, ou busque direto do Google Sheets.</p>
+
+    <!-- Upload JSON -->
+    <div class="upload-section" id="dropZone">
+      <div class="upload-icon">📂</div>
+      <h3>Upload de arquivo JSON</h3>
+      <p>Arraste e solte o arquivo <strong>respostas_grupos.json</strong> aqui,<br>ou clique para selecionar.</p>
+      <label class="btn-upload" for="fileInput">Selecionar arquivo JSON</label>
+      <input type="file" id="fileInput" accept=".json">
+    </div>
+
+    <!-- Sheets -->
+    <div class="sheets-section">
+      <h3>🔗 Carregar do Google Sheets (Apps Script)</h3>
+      <div class="input-row">
+        <input type="text" id="sheetsUrl" placeholder="URL do Apps Script (doGet) — ex.: https://script.google.com/macros/s/..." value="https://script.google.com/macros/s/AKfycbxo6UOa-2XotofASSK_Axjzx8Hk6Hd6ZnGZnQU8D7F490GIThNaP_fC-5XI7u_6bGOr/exec">
+        <button class="btn-sheets" onclick="carregarSheets()">🔄 Carregar</button>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div id="statusBar"><span class="dot"></span> Aguardando dados…</div>
+
+    <!-- Preview estrutura -->
+    <div id="previewArea" style="display:none;">
+      <div class="sec-title" style="font-size:15px; margin-bottom:8px;">📋 Pré-visualização</div>
+      <div id="previewContent"></div>
+    </div>
+
+  </div>
+
+  <!-- ══════════ TAB: GRUPOS ══════════ -->
+  <div class="tab-panel" id="tab-grupos">
+
+    <p class="sec-title">Respostas por Grupo</p>
+    <p class="sec-sub">Cada card exibe os resultados financeiros automáticos, alertas de penalidades/bônus e campos discursivos.</p>
+
+    <div class="actions-bar">
+      <button class="btn-action" onclick="exportarTudo()">⬇️ Exportar JSON consolidado</button>
+      <button class="btn-action" onclick="exportarCSV()">📄 Exportar CSV notas</button>
+      <button class="btn-action" onclick="imprimirRelatorio()">🖨️ Imprimir relatório</button>
+    </div>
+
+    <div class="grupos-grid" id="gruposGrid">
+      <div class="empty-state">
+        <div class="icon">📭</div>
+        <h3>Nenhum dado carregado</h3>
+        <p>Vá em <strong>Importar Dados</strong> e faça upload do JSON ou carregue do Sheets.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════ TAB: COMPARATIVO ══════════ -->
+  <div class="tab-panel" id="tab-comparativo">
+
+    <p class="sec-title">Comparativo da Turma</p>
+    <p class="sec-sub">Médias calculadas apenas sobre grupos que submeteram.</p>
+
+    <div class="resumo-grid" id="resumoGrid">
+      <div class="resumo-card"><div class="resumo-num">—</div><div class="resumo-label">Grupos submetidos</div></div>
+      <div class="resumo-card"><div class="resumo-num">—</div><div class="resumo-label">Resultado médio (R$)</div></div>
+      <div class="resumo-card"><div class="resumo-num">—</div><div class="resumo-label">Maior resultado</div></div>
+      <div class="resumo-card"><div class="resumo-num">—</div><div class="resumo-label">Menor resultado</div></div>
+      <div class="resumo-card"><div class="resumo-num">—</div><div class="resumo-label">Nota média</div></div>
+    </div>
+
+    <div class="table-wrap">
+      <table id="tabelaComparativa">
+        <thead>
+          <tr>
+            <th>Grupo</th><th>Cidades</th><th>Rota (h)</th>
+            <th>Resultado Líq.</th><th>Penalidades</th><th>Bônus</th>
+            <th>Nota Financ.</th><th>Nota Discurs.</th><th>Nota Final</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaBody">
+          <tr><td colspan="9" style="text-align:center; color: var(--texto-m); padding: 40px;">Sem dados</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- ══════════ TAB: NOTAS FINAIS ══════════ -->
+  <div class="tab-panel" id="tab-notas">
+
+    <p class="sec-title">Notas Finais por Grupo</p>
+    <p class="sec-sub">Rubrica: 4 campos × 2,5 pts = 10 pts. Ajuste as notas discursivas abaixo.</p>
+
+    <div id="notasContainer">
+      <div class="empty-state">
+        <div class="icon">🎓</div>
+        <h3>Carregue os dados primeiro</h3>
+      </div>
+    </div>
+
+    <div id="notasActions" style="display:none;" class="actions-bar">
+      <button class="btn-action primary" onclick="salvarNotas()">💾 Salvar notas</button>
+      <button class="btn-action" onclick="exportarCSV()">📄 Exportar CSV</button>
+    </div>
+
+  </div>
+
+</main>
+
+<!-- MODAL DETALHES -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <button class="modal-close" onclick="fecharModal()">✕</button>
+    <div id="modalContent"></div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════
-// DADOS
-// ═══════════════════════════════════════════════
-var DIST={Fazenda:{A:71,B:40,C:35,D:47,E:62,F:57,G:65,H:80,I:38,J:65,K:45,L:55},A:{Fazenda:71,B:68,C:90,D:104,E:120,F:122,G:58,H:40,I:85,J:50,K:95,L:30},B:{Fazenda:40,A:68,C:25,D:87,E:55,F:61,G:91,H:110,I:45,J:33,K:50,L:75},C:{Fazenda:35,A:90,B:25,D:60,E:45,F:50,G:105,H:130,I:30,J:55,K:20,L:85},D:{Fazenda:47,A:104,B:87,C:60,E:35,F:76,G:67,H:95,I:40,J:111,K:42,L:90},E:{Fazenda:62,A:120,B:55,C:45,D:35,F:40,G:115,H:145,I:55,J:85,K:30,L:110},F:{Fazenda:57,A:122,B:61,C:50,D:76,E:40,G:120,H:150,I:70,J:94,K:45,L:130},G:{Fazenda:65,A:58,B:91,C:105,D:67,E:115,F:120,H:35,I:80,J:95,K:70,L:45},H:{Fazenda:80,A:40,B:110,C:130,D:95,E:145,F:150,G:35,I:110,J:115,K:90,L:25},I:{Fazenda:38,A:85,B:45,C:30,D:40,E:55,F:70,G:80,H:110,J:75,K:35,L:65},J:{Fazenda:65,A:50,B:33,C:55,D:111,E:85,F:94,G:95,H:115,I:75,K:65,L:60},K:{Fazenda:45,A:95,B:50,C:20,D:42,E:30,F:45,G:70,H:90,I:35,J:65,L:80},L:{Fazenda:55,A:30,B:75,C:85,D:90,E:110,F:130,G:45,H:25,I:65,J:60,K:80}};
-var TIMES={Fazenda:{A:'03:11',B:'00:40',C:'00:35',D:'00:47',E:'01:02',F:'01:27',G:'01:05',H:'02:50',I:'00:38',J:'01:20',K:'00:45',L:'00:55'},A:{Fazenda:'01:11',B:'01:08',C:'01:30',D:'01:44',E:'02:00',F:'02:32',G:'00:58',H:'02:10',I:'01:25',J:'01:05',K:'01:35',L:'00:30'},B:{Fazenda:'00:40',A:'03:08',C:'00:25',D:'01:27',E:'00:55',F:'01:31',G:'01:31',H:'03:20',I:'00:45',J:'00:48',K:'00:50',L:'01:15'},C:{Fazenda:'00:35',A:'03:30',B:'00:25',D:'01:00',E:'00:45',F:'01:20',G:'01:45',H:'03:40',I:'00:30',J:'01:10',K:'00:20',L:'01:25'},D:{Fazenda:'00:47',A:'03:44',B:'01:27',C:'01:00',E:'00:35',F:'01:46',G:'01:07',H:'03:05',I:'00:40',J:'02:06',K:'00:42',L:'01:30'},E:{Fazenda:'01:02',A:'04:00',B:'00:55',C:'00:45',D:'00:35',F:'01:10',G:'01:55',H:'03:55',I:'00:55',J:'01:40',K:'00:30',L:'01:50'},F:{Fazenda:'00:57',A:'04:02',B:'01:01',C:'00:50',D:'01:16',E:'00:40',G:'02:00',H:'04:00',I:'01:10',J:'01:49',K:'00:45',L:'02:10'},G:{Fazenda:'01:05',A:'02:58',B:'01:31',C:'01:45',D:'01:07',E:'01:55',F:'02:30',H:'02:05',I:'01:20',J:'01:50',K:'01:10',L:'00:45'},H:{Fazenda:'01:20',A:'02:40',B:'01:50',C:'02:10',D:'01:35',E:'02:25',F:'03:00',G:'00:35',I:'01:50',J:'02:10',K:'01:30',L:'00:25'},I:{Fazenda:'00:38',A:'03:25',B:'00:45',C:'00:30',D:'00:40',E:'00:55',F:'01:40',G:'01:20',H:'03:20',J:'01:30',K:'00:35',L:'01:05'},J:{Fazenda:'01:05',A:'02:50',B:'00:33',C:'00:55',D:'01:51',E:'01:25',F:'02:04',G:'01:35',H:'03:25',I:'01:15',K:'01:05',L:'01:00'},K:{Fazenda:'00:45',A:'03:35',B:'00:50',C:'00:20',D:'00:42',E:'00:30',F:'01:15',G:'01:10',H:'03:00',I:'00:35',J:'01:20',L:'01:20'},L:{Fazenda:'00:55',A:'02:30',B:'01:15',C:'01:25',D:'01:30',E:'01:50',F:'02:10',G:'00:45',H:'00:25',I:'01:05',J:'01:00',K:'01:20'}};
+// ═══════════════════════════════════════════
+//  Estado global
+// ═══════════════════════════════════════════
+let dadosGlobais = null; // { grupos: [...] }
+let notasDiscursivas = {}; // { g1: { d1: x, d2: x, d3: x, d4: x } }
 
-var allRows=[], notas=JSON.parse(localStorage.getItem('pbl2026_notas')||'{}');
-var expanded=null, fonteAtual=null, jsonFiles=[], jsonRows=[];
+// Constantes do PBL
+const PARAMS = {
+  velocidade: 60,        // km/h
+  consumo: 12,           // km/L
+  precoDiesel: 5.80,     // R$/L base
+  jornadaMax: 10,        // horas
+  saida: 5,              // 05:00h
+  fimDia: 18,            // 18:00h calor
+  bonusPeixe: 2000,
+  bonusVegetais: 0.15,
+  bonusFrutas: 0.15,
+  descDescontoC: 0.20,
+  multaD: 500,
+  perdaF: 1500,
+  perdaRota12h: 1000,
+  perdaJornada10h: 3000,
+  receitaBase: 15000,    // base por rota completa
+  calor: 0.15,
+};
 
-// ═══════════════════════════════════════════════
-// UTILS
-// ═══════════════════════════════════════════════
-function ck(l){return l?String(l).split(/[-\u2013]/)[0].trim():'';}
-function pm(t){if(!t||t==='---')return 0;var p=String(t).split(':');return parseInt(p[0]||0)*60+parseInt(p[1]||0);}
-function hm(m){m=Math.abs(m);return Math.floor(m/60).toString().padStart(2,'0')+':'+((m%60).toString().padStart(2,'0'));}
-function fr(v){return 'R$\u00a0'+Math.round(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function gd(o,d){return(DIST[o]&&DIST[o][d])?DIST[o][d]:0;}
-function gt(o,d){return(TIMES[o]&&TIMES[o][d])?TIMES[o][d]:'00:00';}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-
-// ═══════════════════════════════════════════════
-// HOME / FONTE
-// ═══════════════════════════════════════════════
-function selecionarFonte(f){
-  document.getElementById('detailSheets').classList.remove('active');
-  document.getElementById('detailJson').classList.remove('active');
-  document.getElementById('cardSheets').classList.remove('active');
-  document.getElementById('cardJson').classList.remove('active');
-  document.getElementById('detail'+f.charAt(0).toUpperCase()+f.slice(1)).classList.add('active');
-  document.getElementById('card'+f.charAt(0).toUpperCase()+f.slice(1)).classList.add('active');
-  fonteAtual=f;
+// ═══════════════════════════════════════════
+//  Tabs
+// ═══════════════════════════════════════════
+function switchTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
 }
 
-function voltarHome(){
-  document.getElementById('homeScreen').style.display='';
-  document.getElementById('panelScreen').style.display='none';
-  document.getElementById('btnHome').style.display='none';
-  document.getElementById('btnReload').style.display='none';
-  document.getElementById('srcBadge').style.display='none';
-  allRows=[];expanded=null;
+// ═══════════════════════════════════════════
+//  Upload JSON
+// ═══════════════════════════════════════════
+const dropZone   = document.getElementById('dropZone');
+const fileInput  = document.getElementById('fileInput');
+
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) processarArquivo(file);
+});
+fileInput.addEventListener('change', () => {
+  if (fileInput.files[0]) processarArquivo(fileInput.files[0]);
+});
+
+function processarArquivo(file) {
+  if (!file.name.endsWith('.json')) {
+    setStatus('erro', '❌ Arquivo inválido. Selecione um arquivo .json');
+    return;
+  }
+  setStatus('info', `⏳ Lendo ${file.name}…`);
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const dados = JSON.parse(e.target.result);
+      processarDados(dados, `Arquivo: ${file.name}`);
+    } catch (err) {
+      setStatus('erro', '❌ JSON inválido: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
 }
 
-function recarregar(){
-  if(fonteAtual==='sheets') carregarSheets();
+// ═══════════════════════════════════════════
+//  Carregar Google Sheets
+// ═══════════════════════════════════════════
+async function carregarSheets() {
+  const url = document.getElementById('sheetsUrl').value.trim();
+  if (!url) { setStatus('erro', '❌ Informe a URL do Apps Script'); return; }
+  setStatus('info', '⏳ Conectando ao Google Sheets…');
+  try {
+    const resp = await fetch(url + '?action=getDados');
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const dados = await resp.json();
+    processarDados(dados, 'Google Sheets');
+  } catch (err) {
+    setStatus('erro', '❌ Erro ao conectar: ' + err.message + ' — Verifique se o Apps Script está publicado como "qualquer pessoa".');
+  }
 }
 
-function mostrarPainel(fonte){
-  document.getElementById('homeScreen').style.display='none';
-  document.getElementById('panelScreen').style.display='';
-  document.getElementById('btnHome').style.display='';
-  document.getElementById('btnReload').style.display=fonte==='sheets'?'':'none';
-  var badge=document.getElementById('srcBadge');
-  badge.style.display='';
-  badge.textContent=fonte==='sheets'?'Google Sheets':'JSON Local';
+// ═══════════════════════════════════════════
+//  Processar dados recebidos
+// ═══════════════════════════════════════════
+function processarDados(dados, fonte) {
+  // Normaliza: aceita { grupos: [...] } ou array direto ou { g1: {...}, g2: {...} }
+  let grupos = [];
+  if (Array.isArray(dados)) {
+    grupos = dados;
+  } else if (dados.grupos && Array.isArray(dados.grupos)) {
+    grupos = dados.grupos;
+  } else if (typeof dados === 'object') {
+    // formato chave-valor tipo { g1: {...}, g2: {...} }
+    grupos = Object.entries(dados).map(([k, v]) => ({ grupo: k, ...v }));
+  }
+
+  if (grupos.length === 0) {
+    setStatus('erro', '❌ Nenhum grupo encontrado no arquivo.');
+    return;
+  }
+
+  // Calcular financeiro para cada grupo
+  grupos = grupos.map(g => ({ ...g, calc: calcularFinanceiro(g) }));
+
+  dadosGlobais = { grupos, fonte };
+  setStatus('ok', `✅ ${grupos.length} grupo(s) carregados de: ${fonte}`);
+
+  // Preview
+  mostrarPreview(grupos);
+  renderGrupos(grupos);
+  renderComparativo(grupos);
+  renderNotas(grupos);
 }
 
-// ═══════════════════════════════════════════════
-// GOOGLE SHEETS
-// ═══════════════════════════════════════════════
-function testarConexao(){
-  var id=document.getElementById('sheetId').value.trim();
-  if(!id){alert('Cole o ID da planilha.');return;}
-  var msg=document.getElementById('sheetsMsg');
-  msg.innerHTML='<span style="color:var(--ink3)">Testando conexao...</span>';
-  var url='https://docs.google.com/spreadsheets/d/'+id+'/gviz/tq?tqx=out:json&nocache='+Date.now();
-  fetch(url).then(function(r){return r.text();}).then(function(t){
-    var json=JSON.parse(t.replace(/^[^\{]*/,'').replace(/\);\s*$/,''));
-    var rows=(json.table&&json.table.rows)||[];
-    msg.innerHTML='<span style="color:var(--g2)">&#10003; Conexao OK! '+rows.length+' linhas encontradas (incluindo cabecalho).</span>';
-  }).catch(function(){
-    msg.innerHTML='<span style="color:var(--r2)">&#10007; Falha. Verifique se a planilha esta publica (Qualquer pessoa com o link - Leitor).</span>';
-  });
-}
+// ═══════════════════════════════════════════
+//  Motor de cálculo financeiro
+// ═══════════════════════════════════════════
+function calcularFinanceiro(g) {
+  const cidades = g.cidades || g.rotaCidades || [];
+  const horaSaida = g.horaSaida || PARAMS.saida;
+  const distanciaTotal = parseFloat(g.distanciaTotal || g.distancia || 0);
+  const produtos = g.produtos || {};
+  const temOndaCalor = g.ondaCalor === true || g.ondaCalor === 'true' || g.ondaCalor === 'sim';
 
-function carregarSheets(){
-  var id=document.getElementById('sheetId').value.trim();
-  if(!id){alert('Cole o ID da planilha.');return;}
-  mostrarPainel('sheets');
-  fonteAtual='sheets';
-  document.getElementById('panelScreen').innerHTML='<div class="main"><div class="loading-wrap"><div class="spinner"></div><div class="loading-text">Carregando do Google Sheets...</div></div></div>';
-  var url='https://docs.google.com/spreadsheets/d/'+id+'/gviz/tq?tqx=out:json&nocache='+Date.now();
-  fetch(url).then(function(r){return r.text();}).then(function(text){
-    var json=JSON.parse(text.replace(/^[^\{]*/,'').replace(/\);\s*$/,''));
-    var table=json.table;
-    if(!table||!table.rows||!table.rows.length){allRows=[];renderPanel();return;}
-    var COL={timestamp:0,grupo:1,curso:2,membros:3,criterio:4,objetivo:5,metas:6,onda_resp:7,cidades:8,just_cidades:9,rota:10,just_rota:11,memoria:12,tilap:13,hortalica:14,frutas:15,zootecnia:16,obs:17,status:18};
-    allRows=table.rows.filter(function(row){
-      var f=row.c[COL.grupo];return f&&f.v!=null&&String(f.v).toLowerCase()!=='grupo';
-    }).map(function(row){
-      function cell(i){return(row.c[i]&&row.c[i].v!=null)?String(row.c[i].v):'';}
-      return{timestamp:cell(COL.timestamp),grupo:cell(COL.grupo),curso:cell(COL.curso),membros:cell(COL.membros),criterio:cell(COL.criterio),objetivo:cell(COL.objetivo),metas:cell(COL.metas),onda_resp:cell(COL.onda_resp),cidades:cell(COL.cidades),just_cidades:cell(COL.just_cidades),rota_str:cell(COL.rota),just_rota:cell(COL.just_rota),memoria:cell(COL.memoria),tilap:cell(COL.tilap),hortalica:cell(COL.hortalica),frutas:cell(COL.frutas),zootecnia:cell(COL.zootecnia),obs:cell(COL.obs),status:cell(COL.status)};
-    });
-    renderPanel();
-  }).catch(function(e){
-    document.getElementById('panelScreen').innerHTML='<div class="main"><div class="alert alert-d" style="max-width:600px;margin:40px auto">&#10007; <div><strong>Erro ao carregar o Sheets.</strong><br>Verifique se a planilha esta publica como Leitor.<br><small>'+esc(e.toString())+'</small><br><br><button class="btn btn-primary btn-sm" onclick="voltarHome()">Voltar</button></div></div></div>';
-  });
-}
+  // Tempo de rota
+  const tempoHoras = distanciaTotal / PARAMS.velocidade;
+  const tempoMin   = Math.round(tempoHoras * 60);
 
-// ═══════════════════════════════════════════════
-// JSON UPLOAD
-// ═══════════════════════════════════════════════
-function dragOver(e){e.preventDefault();document.getElementById('dropArea').classList.add('over');}
-function dragLeave(e){document.getElementById('dropArea').classList.remove('over');}
-function dropFiles(e){e.preventDefault();document.getElementById('dropArea').classList.remove('over');processarArquivos(e.dataTransfer.files);}
+  // Combustível
+  const litros = distanciaTotal / PARAMS.consumo;
+  let precoDiesel = PARAMS.precoDiesel;
 
-function processarArquivos(files){
-  Array.from(files).forEach(function(f){
-    if(jsonFiles.find(function(x){return x.name===f.name;})) return;
-    jsonFiles.push(f);
-  });
-  renderFileList();
-}
+  // Desconto cidade C na rota
+  if (cidades.includes('C') || cidades.includes('c')) precoDiesel *= (1 - PARAMS.descDescontoC);
 
-function renderFileList(){
-  var list=document.getElementById('fileList');
-  var actions=document.getElementById('jsonActions');
-  var btnCarregar=document.getElementById('btnCarregarJson');
-  list.innerHTML=jsonFiles.map(function(f,i){
-    return '<div class="file-item"><span class="fn">'+esc(f.name)+'</span><span class="fs">'+Math.round(f.size/1024)+' KB</span><button class="rm" onclick="removerArquivo('+i+')">&#215;</button></div>';
-  }).join('');
-  actions.style.display=jsonFiles.length?'flex':'none';
-  btnCarregar.style.display=jsonFiles.length?'':'none';
-}
+  // Calor: +15% sobre horas diurnas
+  let adicionalCalor = 0;
+  if (temOndaCalor) {
+    const horaFim = horaSaida + tempoHoras;
+    const horasCalor = Math.max(0, Math.min(horaFim, PARAMS.fimDia) - Math.max(horaSaida, PARAMS.saida));
+    const fracaoCalor = tempoHoras > 0 ? horasCalor / tempoHoras : 0;
+    adicionalCalor = litros * precoDiesel * PARAMS.calor * fracaoCalor;
+  }
+  const custoCombustivel = litros * precoDiesel + adicionalCalor;
 
-function removerArquivo(i){jsonFiles.splice(i,1);renderFileList();}
-function limparArquivos(){jsonFiles=[];renderFileList();}
+  // Receitas e bônus
+  let receita = parseFloat(g.receita || g.receitaBruta || PARAMS.receitaBase);
+  let bonus = 0;
+  const bonusDesc = [];
+  const penDesc   = [];
 
-function carregarJson(){
-  if(!jsonFiles.length) return;
-  var promises=jsonFiles.map(function(f){
-    return new Promise(function(resolve){
-      var reader=new FileReader();
-      reader.onload=function(e){
-        try{resolve(JSON.parse(e.target.result));}catch(err){resolve(null);}
-      };
-      reader.readAsText(f);
-    });
-  });
-  Promise.all(promises).then(function(results){
-    jsonRows=[];
-    results.forEach(function(data){
-      if(!data) return;
-      // formato: {"Grupo 1":{submitted,data,curso,...}} ou direto {submitted,data,...}
-      if(data.grupo||data.membros||data.submitted!==undefined){
-        // arquivo individual de um grupo
-        var d=data.data||data;
-        var row=jsonParaRow(data.grupo||'', data.curso||'', data.submittedAt||'', d, data.submitted);
-        if(row) jsonRows.push(row);
-      } else {
-        // arquivo com todos os grupos
-        Object.keys(data).forEach(function(grupo){
-          var gdata=data[grupo];
-          var d=gdata.data||gdata;
-          var row=jsonParaRow(grupo, gdata.curso||'', gdata.submittedAt||'', d, gdata.submitted);
-          if(row) jsonRows.push(row);
-        });
-      }
-    });
-    allRows=jsonRows;
-    mostrarPainel('json');
-    fonteAtual='json';
-    renderPanel();
-  });
-}
+  if (cidades.includes('A') && (produtos.peixe || produtos.fish)) {
+    bonus += PARAMS.bonusPeixe;
+    bonusDesc.push(`+R$ 2.000 (Peixe Cidade A)`);
+  }
+  if (cidades.includes('B') && (produtos.vegetais || produtos.legumes)) {
+    const b = receita * PARAMS.bonusVegetais;
+    bonus += b;
+    bonusDesc.push(`+R$ ${b.toFixed(0)} (Vegetais Cidade B)`);
+  }
+  if (cidades.includes('E') && (produtos.frutas || produtos.fruits)) {
+    const b = receita * PARAMS.bonusFrutas;
+    bonus += b;
+    bonusDesc.push(`+R$ ${b.toFixed(0)} (Frutas Cidade E)`);
+  }
 
-function jsonParaRow(grupo, curso, timestamp, d, submitted){
-  if(!d) return null;
-  var rota=(d.rota||[]).filter(function(r){return r.destino;}).map(function(r,i){return (i+1)+'. '+r.destino;}).join(' -> ');
-  var justRota=(d.rota||[]).filter(function(r){return r.destino&&r.justificativa;}).map(function(r,i){return (i+1)+'. '+r.justificativa;}).join(' | ');
-  var cidades=(d.cidades||[]).filter(function(c){return c.cidade;}).map(function(c){return c.cidade+(c.motivo?' ('+c.motivo+')':'');}).join(' | ');
-  return{
-    timestamp:timestamp,grupo:grupo||'Sem nome',curso:curso||d.curso||'',
-    membros:(d.membros||[]).join(', '),criterio:d.criterio||'',objetivo:d.objetivo||'',
-    metas:d.metas||'',onda_resp:d.onda_resp||'',cidades:cidades,just_cidades:d.just_cidades||'',
-    rota_str:rota,just_rota:justRota,memoria:d.memoria||'',
-    tilap:d.tilap||'',hortalica:d.hortalica||'',frutas:d.frutas||'',zootecnia:d.zootecnia||'',
-    obs:d.obs||'',status:submitted?'Entregue':'Pendente'
+  // Penalidades
+  let penalidades = 0;
+  const horaChegadaD = calcHoraChegadaD(cidades, horaSaida, g.distancias || {});
+  if (cidades.includes('D') && horaChegadaD > 8) {
+    penalidades += PARAMS.multaD;
+    penDesc.push(`-R$ 500 (Multa Cidade D após 08:00h)`);
+  }
+  if (cidades.includes('F') && (produtos.frutas || produtos.fruits)) {
+    penalidades += PARAMS.perdaF;
+    penDesc.push(`-R$ 1.500 (Perda frutas estrada terra Cidade F)`);
+    // Economia circular: vender resíduo em I
+    if (cidades.includes('I')) {
+      const recuperado = (receita * PARAMS.bonusFrutas) * 0.5;
+      bonus += recuperado;
+      bonusDesc.push(`+R$ ${recuperado.toFixed(0)} (Econ. Circular: resíduo → suplemento Cidade I)`);
+    }
+  }
+  if (tempoHoras > 12) {
+    penalidades += PARAMS.perdaRota12h;
+    penDesc.push(`-R$ 1.000 (Rota > 12h)`);
+  }
+  if (tempoHoras > PARAMS.jornadaMax) {
+    penalidades += PARAMS.perdaJornada10h;
+    penDesc.push(`-R$ 3.000 (Jornada > 10h)`);
+  }
+
+  const resultadoLiquido = receita + bonus - custoCombustivel - penalidades;
+
+  return {
+    distanciaTotal, tempoHoras, tempoMin,
+    custoCombustivel, litros, precoDiesel,
+    receita, bonus, penalidades,
+    resultadoLiquido,
+    bonusDesc, penDesc,
+    alertaJornada: tempoHoras > PARAMS.jornadaMax,
+    alertaRota12h: tempoHoras > 12,
+    alertaD: cidades.includes('D') && horaChegadaD > 8,
   };
 }
 
-// ═══════════════════════════════════════════════
-// PARSE ROTA
-// ═══════════════════════════════════════════════
-function parseRota(rs,js){
-  if(!rs) return[];
-  var sep=rs.indexOf('\u2192')>=0?'\u2192':'->';
-  var parts=rs.split(sep).map(function(s){return s.trim();});
-  var justs=(js||'').split('|').map(function(s){return s.trim();});
-  return parts.map(function(p,i){
-    var m=p.match(/^\d+\.\s*(.+)$/);
-    return{destino:m?m[1].trim():p, justificativa:justs[i]||''};
-  }).filter(function(r){return r.destino;});
-}
-
-// ═══════════════════════════════════════════════
-// CALCULO FINANCEIRO
-// ═══════════════════════════════════════════════
-function calcFin(rota){
-  var keys=rota.map(function(r){return ck(r.destino);}).filter(Boolean);
-  var totalKm=0,totalMins=0;
-  rota.forEach(function(r,i){
-    var orig=i===0?'Fazenda':ck(rota[i-1].destino);
-    var dest=ck(r.destino);
-    if(orig&&dest&&orig!==dest){totalKm+=gd(orig,dest);totalMins+=pm(gt(orig,dest));}
-  });
-  if(keys.length){var last=keys[keys.length-1];totalKm+=gd(last,'Fazenda');totalMins+=pm(gt(last,'Fazenda'));}
-  var hasC=keys.indexOf('C')>=0,descontoC=0;
-  if(hasC){var ci=keys.indexOf('C');var oC=ci===0?'Fazenda':keys[ci-1];var dC=ci<keys.length-1?keys[ci+1]:'Fazenda';descontoC=(gd(oC,'C')+gd('C',dC))*2.5*0.20;}
-  var combBase=totalKm*2.5-descontoC;
-  // Onda de Calor proporcional: +15% apenas nas horas diurnas (05:00-18:00)
-  var DIUR_INI=300, DIUR_FIM=1080; // 05:00 e 18:00 em minutos
-  function fracDiurna(saidaM, durM){
-    if(!durM) return 0;
-    var dI=Math.max(saidaM,DIUR_INI), dF=Math.min(saidaM+durM,DIUR_FIM);
-    return Math.max(0,dF-dI)/durM;
+function calcHoraChegadaD(cidades, horaSaida, distancias) {
+  // Estimativa simples: posição de D na rota × velocidade média
+  const idx = cidades.indexOf('D');
+  if (idx < 0) return 0;
+  let dist = 0;
+  for (let i = 0; i < idx; i++) {
+    const key = `${cidades[i]}-${cidades[i+1]}`;
+    dist += distancias[key] || distancias[cidades[i]] || 40; // fallback
   }
-  function pmLocal(t){if(!t||t==='---')return 0;var p=String(t).split(':');return parseInt(p[0]||0)*60+parseInt(p[1]||0);}
-  var combOC=0, acumM=300; // parte 05:00
-  rota.forEach(function(r,i){
-    var orig=i===0?'Fazenda':ck(rota[i-1].destino);
-    var dest=ck(r.destino);
-    if(!orig||!dest||orig===dest) return;
-    var km=gd(orig,dest), dur=pmLocal(gt(orig,dest));
-    combOC += km * 2.50 * 0.15 * fracDiurna(acumM, dur);
-    acumM  += dur;
+  return horaSaida + dist / PARAMS.velocidade;
+}
+
+// ═══════════════════════════════════════════
+//  Render: Preview
+// ═══════════════════════════════════════════
+function mostrarPreview(grupos) {
+  const area = document.getElementById('previewArea');
+  const cont = document.getElementById('previewContent');
+  area.style.display = 'block';
+
+  cont.innerHTML = grupos.map(g => `
+    <span class="pill ${g.submetido !== false ? 'pill-verde' : 'pill-ouro'}" style="margin:4px">
+      ${g.grupo || g.id} — ${g.calc.distanciaTotal} km — R$ ${g.calc.resultadoLiquido.toLocaleString('pt-BR', {minimumFractionDigits:2})}
+    </span>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════
+//  Render: Cards de grupos
+// ═══════════════════════════════════════════
+function renderGrupos(grupos) {
+  const grid = document.getElementById('gruposGrid');
+  if (!grupos.length) { grid.innerHTML = '<div class="empty-state"><div class="icon">📭</div><h3>Sem dados</h3></div>'; return; }
+
+  grid.innerHTML = grupos.map(g => {
+    const c = g.calc;
+    const subm = g.submetido !== false;
+    const notaF = calcNotaFinal(g);
+
+    return `
+    <div class="grupo-card">
+      <div class="grupo-header">
+        <span class="grupo-nome">🌿 ${g.grupo || g.id || 'Grupo'}</span>
+        <span class="grupo-status ${subm ? 'status-submetido' : 'status-pendente'}">${subm ? '✅ Submetido' : '⏳ Pendente'}</span>
+      </div>
+      <div class="grupo-body">
+        <div class="info-row"><span class="info-label">Cidades</span><span class="info-val">${(g.cidades||[]).join(' → ') || '—'}</span></div>
+        <div class="info-row"><span class="info-label">Distância total</span><span class="info-val td-mono">${c.distanciaTotal} km</span></div>
+        <div class="info-row"><span class="info-label">Tempo de rota</span><span class="info-val td-mono ${c.alertaJornada?'neg':''}">${formatarTempo(c.tempoHoras)}</span></div>
+        <div class="info-row"><span class="info-label">Combustível</span><span class="info-val td-mono neg">−R$ ${c.custoCombustivel.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></div>
+        <div class="info-row"><span class="info-label">Bônus total</span><span class="info-val td-mono pos">+R$ ${c.bonus.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></div>
+        <div class="info-row"><span class="info-label">Penalidades</span><span class="info-val td-mono ${c.penalidades>0?'neg':''}">−R$ ${c.penalidades.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></div>
+        <div class="info-row"><span class="info-label">Resultado líquido</span><span class="info-val td-mono ${c.resultadoLiquido>=0?'pos':'neg'}">R$ ${c.resultadoLiquido.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></div>
+
+        <div class="alertas">
+          ${c.bonusDesc.map(b => `<span class="alerta-tag alerta-bon">${b}</span>`).join('')}
+          ${c.penDesc.map(p => `<span class="alerta-tag alerta-pen">${p}</span>`).join('')}
+          ${c.alertaJornada ? '<span class="alerta-tag alerta-warn">⚠️ Jornada > 10h</span>' : ''}
+        </div>
+
+        ${subm && g.discursivas ? `
+        <div class="disc-section">
+          ${Object.entries(g.discursivas||{}).map(([k,v]) => `
+            <div class="disc-campo">
+              <h5>${k}</h5>
+              <p>${v || '<em style="color:var(--texto-m)">Não respondido</em>'}</p>
+              <div class="word-count">${contarPalavras(v)} palavras ${contarPalavras(v) < 10 ? '⚠️ mínimo não atingido' : '✅'}</div>
+            </div>
+          `).join('')}
+        </div>` : ''}
+
+        <div class="nota-final">
+          <div class="nota-num" style="color:${corNota(notaF)}">${notaF.toFixed(1)}</div>
+          <div class="nota-label">Nota Final (0–10)</div>
+        </div>
+
+        <button class="btn-action" style="width:100%;justify-content:center;margin-top:10px" onclick="abrirDetalhe('${g.grupo || g.id}')">
+          🔍 Ver detalhes completos
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════
+//  Render: Comparativo
+// ═══════════════════════════════════════════
+function renderComparativo(grupos) {
+  const subm = grupos.filter(g => g.submetido !== false);
+  if (!subm.length) return;
+
+  const resultados = subm.map(g => g.calc.resultadoLiquido);
+  const notas      = subm.map(g => calcNotaFinal(g));
+  const media      = resultados.reduce((a,b)=>a+b,0) / resultados.length;
+  const max        = Math.max(...resultados);
+  const min        = Math.min(...resultados);
+  const mediaNota  = notas.reduce((a,b)=>a+b,0) / notas.length;
+
+  document.getElementById('resumoGrid').innerHTML = `
+    <div class="resumo-card"><div class="resumo-num">${subm.length}</div><div class="resumo-label">Grupos submetidos</div></div>
+    <div class="resumo-card"><div class="resumo-num">R$ ${(media/1000).toFixed(1)}k</div><div class="resumo-label">Resultado médio</div></div>
+    <div class="resumo-card"><div class="resumo-num" style="color:var(--verde-l)">R$ ${(max/1000).toFixed(1)}k</div><div class="resumo-label">Maior resultado</div></div>
+    <div class="resumo-card"><div class="resumo-num" style="color:#ff8080">R$ ${(min/1000).toFixed(1)}k</div><div class="resumo-label">Menor resultado</div></div>
+    <div class="resumo-card"><div class="resumo-num">${mediaNota.toFixed(1)}</div><div class="resumo-label">Nota média</div></div>
+  `;
+
+  const tbody = document.getElementById('tabelaBody');
+  tbody.innerHTML = grupos.map(g => {
+    const c = g.calc;
+    const nf = calcNotaFinal(g);
+    return `<tr>
+      <td><strong>${g.grupo||g.id}</strong></td>
+      <td class="td-mono">${(g.cidades||[]).join(' → ')||'—'}</td>
+      <td class="td-mono ${c.alertaJornada?'neg':''}">${formatarTempo(c.tempoHoras)}</td>
+      <td class="td-mono ${c.resultadoLiquido>=0?'pos':'neg'}">R$ ${c.resultadoLiquido.toLocaleString('pt-BR',{minimumFractionDigits:2})}</td>
+      <td class="td-mono neg">${c.penalidades>0?'−R$ '+c.penalidades.toLocaleString('pt-BR'):'—'}</td>
+      <td class="td-mono pos">${c.bonus>0?'+R$ '+c.bonus.toLocaleString('pt-BR'):'—'}</td>
+      <td class="td-mono">${calcNotaFinanceiro(g).toFixed(1)}</td>
+      <td class="td-mono">${calcNotaDisc(g).toFixed(1)}</td>
+      <td class="td-mono" style="color:${corNota(nf)};font-weight:700">${nf.toFixed(1)}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════
+//  Render: Notas
+// ═══════════════════════════════════════════
+function renderNotas(grupos) {
+  const cont = document.getElementById('notasContainer');
+  const acts = document.getElementById('notasActions');
+  if (!grupos.length) return;
+  acts.style.display = 'flex';
+
+  cont.innerHTML = grupos.map(g => {
+    const nd = notasDiscursivas[g.grupo||g.id] || {};
+    const campos = g.discursivas ? Object.keys(g.discursivas) : ['Identificação do problema','Análise logística','Decisão estratégica','Reflexão integrada'];
+
+    return `
+    <div class="grupo-card" style="margin-bottom:16px">
+      <div class="grupo-header">
+        <span class="grupo-nome">🌿 ${g.grupo||g.id}</span>
+        <span class="grupo-status status-submetido">Nota: <strong id="notaDisplay_${g.grupo||g.id}">${calcNotaFinal(g).toFixed(1)}</strong></span>
+      </div>
+      <div class="grupo-body">
+        <div class="info-row">
+          <span class="info-label">Nota financeira automática (5 pts)</span>
+          <span class="info-val pos">${calcNotaFinanceiro(g).toFixed(2)} pts</span>
+        </div>
+        <div class="rubrica-inputs">
+          ${campos.map((campo, i) => `
+            <div class="rubrica-row">
+              <label>${campo}</label>
+              <input type="number" min="0" max="2.5" step="0.1"
+                id="disc_${g.grupo||g.id}_${i}"
+                value="${(nd[i]??calcAutoDisc(g, campo, i)).toFixed(1)}"
+                onchange="atualizarNota('${g.grupo||g.id}')" />
+              <span class="pts-max">/ 2,5</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function calcAutoDisc(g, campo, i) {
+  // Auto-nota baseada em palavra-mínima
+  if (!g.discursivas) return 0;
+  const vals = Object.values(g.discursivas);
+  const txt = vals[i] || '';
+  const palavras = contarPalavras(txt);
+  if (!txt || palavras === 0) return 0;
+  if (palavras < 10) return 0.5;
+  if (palavras < 20) return 1.5;
+  return 2.0; // sugerido — professor ajusta
+}
+
+function atualizarNota(grpId) {
+  const g = dadosGlobais.grupos.find(x => (x.grupo||x.id) === grpId);
+  if (!g) return;
+  const campos = g.discursivas ? Object.keys(g.discursivas) : ['c0','c1','c2','c3'];
+  notasDiscursivas[grpId] = {};
+  campos.forEach((_, i) => {
+    const el = document.getElementById(`disc_${grpId}_${i}`);
+    notasDiscursivas[grpId][i] = el ? parseFloat(el.value)||0 : 0;
   });
-  if(keys.length>0){
-    var last=keys[keys.length-1];
-    var km=gd(last,'Fazenda'), dur=pmLocal(gt(last,'Fazenda'));
-    combOC += km * 2.50 * 0.15 * fracDiurna(acumM, dur);
-  }
-  combOC=Math.round(combOC*100)/100;
-  var hasJ=keys.indexOf('J')>=0,ajJ=0;
-  if(hasJ){var ji=keys.indexOf('J');var oJ=ji===0?'Fazenda':keys[ji-1];var dJ=ji<keys.length-1?keys[ji+1]:'Fazenda';ajJ=(gd(oJ,'J')+gd('J',dJ))*2.5*0.30*1.15;}
-  var hasA=keys.indexOf('A')>=0,hasB=keys.indexOf('B')>=0,hasE=keys.indexOf('E')>=0;
-  var hasF=keys.indexOf('F')>=0,hasG=keys.indexOf('G')>=0;
-  var hasD=keys.indexOf('D')>=0,hasK=keys.indexOf('K')>=0,kPos=keys.indexOf('K');
-  var bonusB=hasB?1500:0,bonusE=hasE?1500:0;
-  var penTemp=totalMins>720?1000:0,penJorn=totalMins>600?3000:0;
-  var oppK=(hasK&&kPos<3)?300:0,multaD=hasD?500:0,eficG=hasG?500:0;
-  var carga=10000+(hasA?2000:0)+bonusB+bonusE-(hasF?1500:0)-penTemp-multaD-penJorn;
-  var resultado=carga-(combBase+combOC+ajJ-eficG)+oppK;
-  return{totalKm:totalKm,totalMins:totalMins,combBase:combBase,combOC:combOC,ajJ:ajJ,descontoC:descontoC,hasA:hasA,hasB:hasB,hasE:hasE,bonusB:bonusB,bonusE:bonusE,hasF:hasF,hasG:hasG,hasD:hasD,hasK:hasK,hasC:hasC,kPos:kPos,penTemp:penTemp,penJorn:penJorn,oppK:oppK,multaD:multaD,eficG:eficG,resultado:resultado,keys:keys};
+  const nf = calcNotaFinal(g);
+  const el = document.getElementById(`notaDisplay_${grpId}`);
+  if (el) el.textContent = nf.toFixed(1);
 }
 
-// ═══════════════════════════════════════════════
-// RENDER PANEL
-// ═══════════════════════════════════════════════
-function renderPanel(){
-  var fCurso=document.getElementById('fCurso')?document.getElementById('fCurso').value:'';
-  var fStatus=document.getElementById('fStatus')?document.getElementById('fStatus').value:'';
-  var fOrder=document.getElementById('fOrder')?document.getElementById('fOrder').value:'grupo';
-  var fBusca=(document.getElementById('fBusca')?document.getElementById('fBusca').value:'').toLowerCase();
-  var rows=allRows.slice();
-  if(fCurso) rows=rows.filter(function(r){return r.curso===fCurso;});
-  if(fStatus==='entregue') rows=rows.filter(function(r){return r.status==='Entregue';});
-  if(fStatus==='pendente') rows=rows.filter(function(r){return r.status!=='Entregue';});
-  if(fBusca) rows=rows.filter(function(r){return r.grupo.toLowerCase().indexOf(fBusca)>=0||r.membros.toLowerCase().indexOf(fBusca)>=0;});
-  if(fOrder==='resultado') rows.sort(function(a,b){return calcFin(parseRota(b.rota_str,b.just_rota)).resultado-calcFin(parseRota(a.rota_str,a.just_rota)).resultado;});
-  else if(fOrder==='tempo') rows.sort(function(a,b){return calcFin(parseRota(a.rota_str,a.just_rota)).totalMins-calcFin(parseRota(b.rota_str,b.just_rota)).totalMins;});
-  else rows.sort(function(a,b){return a.grupo.localeCompare(b.grupo);});
-  var total=allRows.length,entregues=allRows.filter(function(r){return r.status==='Entregue';}).length;
-  var resultados=allRows.map(function(r){return calcFin(parseRota(r.rota_str,r.just_rota)).resultado;}).filter(function(v){return !isNaN(v)&&v!==0;});
-  var melhor=resultados.length?Math.max.apply(null,resultados):0;
-  var media=resultados.length?resultados.reduce(function(a,b){return a+b;},0)/resultados.length:0;
-  document.getElementById('statsRow').innerHTML=
-    '<div class="stat"><div class="sv">'+total+'</div><div class="sl">Grupos</div></div>'+
-    '<div class="stat g"><div class="sv">'+entregues+'</div><div class="sl">Entregues</div></div>'+
-    '<div class="stat o"><div class="sv">'+(total-entregues)+'</div><div class="sl">Pendentes</div></div>'+
-    '<div class="stat b"><div class="sv">'+(resultados.length?fr(melhor):'---')+'</div><div class="sl">Melhor resultado</div></div>'+
-    '<div class="stat y"><div class="sv">'+(resultados.length?fr(media):'---')+'</div><div class="sl">Media ('+resultados.length+' grupos)</div></div>';
-  document.getElementById('filterBar').innerHTML=
-    '<span class="flabel">Filtrar:</span>'+
-    '<select id="fCurso" onchange="renderPanel()"><option value="">Todos os cursos</option><option'+(fCurso==='Agronomia'?' selected':'')+'>Agronomia</option><option'+(fCurso==='Engenharia Agr\u00edcola e Ambiental'?' selected':'')+'>Engenharia Agr\u00edcola e Ambiental</option><option'+(fCurso==='Zootecnia'?' selected':'')+'>Zootecnia</option></select>'+
-    '<select id="fStatus" onchange="renderPanel()"><option value="">Todos</option><option value="entregue"'+(fStatus==='entregue'?' selected':'')+'>Entregues</option><option value="pendente"'+(fStatus==='pendente'?' selected':'')+'>Pendentes</option></select>'+
-    '<select id="fOrder" onchange="renderPanel()"><option value="grupo"'+(fOrder==='grupo'?' selected':'')+'>Por grupo</option><option value="resultado"'+(fOrder==='resultado'?' selected':'')+'>Maior resultado</option><option value="tempo"'+(fOrder==='tempo'?' selected':'')+'>Menor tempo</option></select>'+
-    '<input type="text" id="fBusca" placeholder="Buscar membro ou grupo..." value="'+esc(fBusca)+'" oninput="renderPanel()" style="flex:1;min-width:160px">';
-  document.getElementById('groupsList').innerHTML=rows.length?rows.map(renderCard).join(''):'<div class="empty"><div class="empty-icon">&#128269;</div><h3>Nenhum grupo encontrado</h3><p>Ajuste os filtros.</p></div>';
-  if(expanded){var el=document.getElementById('body_'+expanded);var hd=document.getElementById('hd_'+expanded);if(el&&hd){el.classList.add('open');hd.classList.add('open');}}
+// ═══════════════════════════════════════════
+//  Cálculo de notas
+// ═══════════════════════════════════════════
+function calcNotaFinanceiro(g) {
+  // 5 pts baseados no resultado financeiro relativo
+  const c = g.calc;
+  if (!dadosGlobais) return 0;
+  const resultados = dadosGlobais.grupos.map(x => x.calc.resultadoLiquido);
+  const max = Math.max(...resultados);
+  const min = Math.min(...resultados);
+  if (max === min) return 4.0;
+  const pct = (c.resultadoLiquido - min) / (max - min);
+  return Math.min(5, Math.max(0, pct * 5));
 }
 
-// ═══════════════════════════════════════════════
-// RENDER CARD
-// ═══════════════════════════════════════════════
-function renderCard(row){
-  var rota=parseRota(row.rota_str,row.just_rota);
-  var fin=calcFin(rota);
-  var nota=notas[row.grupo]||{};
-  var nt=calcNT(nota);
-  var entregue=row.status==='Entregue';
-  var gid=row.grupo.replace(/\s/g,'_');
-  var alertas=[];
-  if(fin.penJorn>0) alertas.push('<span class="badge br">\u26a0 Jornada excedida</span>');
-  if(fin.penTemp>0) alertas.push('<span class="badge bo">\u26a0 Rota &gt;12h</span>');
-  if(fin.hasF) alertas.push('<span class="badge bo">Cidade F</span>');
-  if(fin.hasA) alertas.push('<span class="badge bg">B\u00f4nus A</span>');
-  if(fin.hasG) alertas.push('<span class="badge bg">Porto Seco G</span>');
-  if(nt>0) alertas.push('<span class="badge by">Nota: '+nt+'/10</span>');
-  var rc=fin.resultado>0?'pos':fin.resultado<0?'neg':'neu';
-  var strip='<span class="rs-node faz">Fazenda</span>';
-  fin.keys.forEach(function(c){var cls=c==='F'?' danger':c==='J'?' warn':'';strip+='<span class="rs-arr">\u2192</span><span class="rs-node city'+cls+'">'+esc(c)+'</span>';});
-  if(fin.keys.length) strip+='<span class="rs-arr">\u2192</span><span class="rs-node faz">Fazenda</span>';
-  return '<div class="gcard" id="card_'+gid+'">'+
-    '<div class="gcard-hd" id="hd_'+gid+'" onclick="toggleCard(\''+gid+'\')">'+
-    '<div class="gcard-num">'+esc(row.grupo.replace('Grupo ',''))+'</div>'+
-    '<div class="gcard-info">'+
-    '<div class="gcard-name">'+esc(row.grupo)+'</div>'+
-    '<div class="gcard-meta"><span>&#128218; '+esc(row.curso||'---')+'</span><span>&#128101; '+esc(row.membros||'---')+'</span><span>&#128336; '+esc(row.timestamp||'---')+'</span></div>'+
-    '<div class="gcard-badges">'+(entregue?'<span class="badge bg">&#10003; Entregue</span>':'<span class="badge bo">&#9201; Pendente</span>')+alertas.join('')+'</div></div>'+
-    '<div class="gcard-right">'+
-    '<div class="gcard-rv '+rc+'"><div class="rv">'+(fin.totalKm?fr(fin.resultado):'---')+'</div><div class="rl">Resultado est.</div></div>'+
-    '<div class="gcard-rv neu"><div class="rv">'+(fin.totalMins?hm(fin.totalMins):'---')+'</div><div class="rl">Tempo rota</div></div></div>'+
-    '<div class="gcard-chevron">\u25be</div></div>'+
-    (fin.keys.length?'<div class="rs">'+strip+'</div>':'')+
-    '<div class="gcard-body" id="body_'+gid+'">'+renderBody(row,rota,fin)+'</div></div>';
+function calcNotaDisc(g) {
+  const nd = notasDiscursivas[g.grupo||g.id];
+  if (!nd) return 0;
+  return Object.values(nd).reduce((a,b)=>a+b,0);
 }
 
-// ═══════════════════════════════════════════════
-// RENDER BODY
-// ═══════════════════════════════════════════════
-function renderBody(row,rota,fin){
-  var gid=row.grupo.replace(/\s/g,'_');
-  var nota=notas[row.grupo]||{};
-  var alertas='';
-  if(fin.penJorn>0) alertas+='<div class="alert alert-d">\u26a0 <strong>Jornada excedida:</strong> '+hm(fin.totalMins)+' totais -- penalidade de '+fr(3000)+'.</div>';
-  if(fin.penTemp>0) alertas+='<div class="alert alert-w">\u26a0 <strong>Rota acima de 12h:</strong> penalidade de '+fr(1000)+' nas hortalicas.</div>';
-  if(fin.hasF) alertas+='<div class="alert alert-w">\u26a0 <strong>Cidade F incluida:</strong> verificar perda nas frutas ('+fr(1500)+').</div>';
-  var rotaRows='',acum=0;
-  rota.forEach(function(r,i){
-    var orig=i===0?'Fazenda':ck(rota[i-1].destino);
-    var dest=ck(r.destino);
-    var km=gd(orig,dest),t=gt(orig,dest);
-    acum+=pm(t);
-    rotaRows+='<tr><td class="tdnum">'+(i+1)+'</td><td class="tdcity">'+esc(orig)+'</td><td class="tdcity">'+esc(r.destino)+'</td><td class="tdkm">'+km+' km</td><td class="tdtime">'+t+'</td><td class="tdtime">'+hm(5*60+acum)+'</td><td class="tdjust">'+esc(r.justificativa||'---')+'</td></tr>';
+function calcNotaFinal(g) {
+  return Math.min(10, calcNotaFinanceiro(g) + calcNotaDisc(g));
+}
+
+// ═══════════════════════════════════════════
+//  Modal detalhe
+// ═══════════════════════════════════════════
+function abrirDetalhe(grpId) {
+  const g = dadosGlobais?.grupos.find(x => (x.grupo||x.id) === grpId);
+  if (!g) return;
+  const c = g.calc;
+  document.getElementById('modalContent').innerHTML = `
+    <h2 style="font-family:Syne,sans-serif; color:var(--verde-l); margin-bottom:16px">🌿 ${g.grupo||g.id} — Detalhes completos</h2>
+    <h4 style="color:var(--texto-m);margin-bottom:8px;font-family:'DM Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.5px">Rota</h4>
+    <p style="margin-bottom:16px">${(g.cidades||[]).join(' → ')||'—'} &nbsp;|&nbsp; ${c.distanciaTotal} km &nbsp;|&nbsp; ${formatarTempo(c.tempoHoras)}</p>
+    <h4 style="color:var(--texto-m);margin-bottom:8px;font-family:'DM Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.5px">Financeiro</h4>
+    <table style="width:100%;font-size:13px;margin-bottom:16px">
+      <tr><td style="padding:4px 0;color:var(--texto-m)">Receita bruta</td><td style="text-align:right;font-family:'DM Mono',monospace">R$ ${c.receita.toLocaleString('pt-BR',{minimumFractionDigits:2})}</td></tr>
+      <tr><td style="padding:4px 0;color:var(--texto-m)">Bônus</td><td style="text-align:right;font-family:'DM Mono',monospace;color:var(--verde-l)">+R$ ${c.bonus.toLocaleString('pt-BR',{minimumFractionDigits:2})}</td></tr>
+      <tr><td style="padding:4px 0;color:var(--texto-m)">Combustível</td><td style="text-align:right;font-family:'DM Mono',monospace;color:#ff8080">−R$ ${c.custoCombustivel.toLocaleString('pt-BR',{minimumFractionDigits:2})}</td></tr>
+      <tr><td style="padding:4px 0;color:var(--texto-m)">Penalidades</td><td style="text-align:right;font-family:'DM Mono',monospace;color:#ff8080">−R$ ${c.penalidades.toLocaleString('pt-BR',{minimumFractionDigits:2})}</td></tr>
+      <tr style="border-top:1px solid var(--borda)"><td style="padding:8px 0;font-weight:700">Resultado líquido</td><td style="text-align:right;font-family:'DM Mono',monospace;font-size:16px;font-weight:700;color:${c.resultadoLiquido>=0?'var(--verde-l)':'#ff8080'}">R$ ${c.resultadoLiquido.toLocaleString('pt-BR',{minimumFractionDigits:2})}</td></tr>
+    </table>
+    <h4 style="color:var(--texto-m);margin-bottom:8px;font-family:'DM Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.5px">Bônus detalhados</h4>
+    <div style="margin-bottom:16px">${c.bonusDesc.length ? c.bonusDesc.map(b=>`<span class="alerta-tag alerta-bon">${b}</span>`).join('') : '<span style="color:var(--texto-m);font-size:13px">Nenhum bônus aplicado</span>'}</div>
+    <h4 style="color:var(--texto-m);margin-bottom:8px;font-family:'DM Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.5px">Penalidades detalhadas</h4>
+    <div style="margin-bottom:20px">${c.penDesc.length ? c.penDesc.map(p=>`<span class="alerta-tag alerta-pen">${p}</span>`).join('') : '<span style="color:var(--verde-l);font-size:13px">✅ Nenhuma penalidade</span>'}</div>
+    ${g.discursivas ? `
+      <h4 style="color:var(--texto-m);margin-bottom:8px;font-family:'DM Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.5px">Respostas discursivas</h4>
+      ${Object.entries(g.discursivas).map(([k,v])=>`
+        <div class="disc-campo">
+          <h5>${k}</h5>
+          <p>${v||'<em style="color:var(--texto-m)">Não respondido</em>'}</p>
+          <div class="word-count">${contarPalavras(v)} palavras</div>
+        </div>
+      `).join('')}
+    ` : ''}
+    <div class="nota-final" style="margin-top:20px">
+      <div class="nota-num" style="color:${corNota(calcNotaFinal(g))}">${calcNotaFinal(g).toFixed(1)}</div>
+      <div class="nota-label">Nota Final (0–10)</div>
+    </div>
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function fecharModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+document.getElementById('modalOverlay').addEventListener('click', e => { if(e.target===e.currentTarget)fecharModal(); });
+
+// ═══════════════════════════════════════════
+//  Exportar
+// ═══════════════════════════════════════════
+function exportarTudo() {
+  if (!dadosGlobais) { alert('Nenhum dado carregado.'); return; }
+  const obj = {
+    exportadoEm: new Date().toISOString(),
+    fonte: dadosGlobais.fonte,
+    grupos: dadosGlobais.grupos.map(g => ({
+      ...g,
+      calculo: g.calc,
+      notaFinanceiro: calcNotaFinanceiro(g),
+      notaDiscursiva: calcNotaDisc(g),
+      notaFinal: calcNotaFinal(g),
+    }))
+  };
+  baixar(JSON.stringify(obj, null, 2), 'avaliacoes_cinturao_verde.json', 'application/json');
+}
+
+function exportarCSV() {
+  if (!dadosGlobais) { alert('Nenhum dado carregado.'); return; }
+  const linhas = [['Grupo','Cidades','Distancia_km','Tempo_h','Resultado_liquido','Penalidades','Bonus','Nota_Financeiro','Nota_Discursiva','Nota_Final']];
+  dadosGlobais.grupos.forEach(g => {
+    const c = g.calc;
+    linhas.push([
+      g.grupo||g.id,
+      (g.cidades||[]).join('-'),
+      c.distanciaTotal,
+      c.tempoHoras.toFixed(2),
+      c.resultadoLiquido.toFixed(2),
+      c.penalidades.toFixed(2),
+      c.bonus.toFixed(2),
+      calcNotaFinanceiro(g).toFixed(2),
+      calcNotaDisc(g).toFixed(2),
+      calcNotaFinal(g).toFixed(2),
+    ]);
   });
-  if(rota.length>0){var lk=ck(rota[rota.length-1].destino);var km=gd(lk,'Fazenda');var t=gt(lk,'Fazenda');acum+=pm(t);rotaRows+='<tr style="background:var(--g5)"><td class="tdnum">\u21a9</td><td class="tdcity" style="color:var(--g2)">'+esc(rota[rota.length-1].destino)+'</td><td class="tdcity" style="color:var(--g2)">Fazenda</td><td class="tdkm">'+km+' km</td><td class="tdtime">'+t+'</td><td class="tdtime">'+hm(5*60+acum)+'</td><td class="tdjust" style="color:var(--g2)">Retorno</td></tr>';}
-  var pct=Math.min(110,Math.round(fin.totalMins/600*100));
-  var pc=pct>100?'#c23b3b':pct>85?'#c45e1a':'#2d5c34';
-  var rc=fin.resultado>0?'pos':'neg';
-  var calcRows=[
-    ['Combustivel bruto (sem desconto)',fr(fin.combBase+fin.descontoC),'vm'],
-    ['Desconto Diesel Cidade C (-20%)',fin.hasC?'-'+fr(fin.descontoC):'nao incluso',fin.hasC?'vp':'vne'],
-    ['+15% Onda de Calor (horas diurnas)',fr(fin.combOC),'vn'],
-    ['Ajuste Serra (J)',fin.ajJ?fr(-fin.ajJ):'nao aplica',fin.ajJ?'vn':'vne'],
-    ['Valor da Carga Base','R$\u00a010.000,00','vm'],
-    ['Bonus Cidade A',fin.hasA?'+'+fr(2000):'nao incluso',fin.hasA?'vp':'vne'],
-    ['Bonus Cidade B (hortalicas +15%)',fin.hasB?'+'+fr(fin.bonusB):'nao incluso',fin.hasB?'vp':'vne'],
-    ['Bonus Cidade E (frutas +15%)',fin.hasE?'+'+fr(fin.bonusE):'nao incluso',fin.hasE?'vp':'vne'],
-    ['Perda Estrada F',fin.hasF?'-'+fr(1500):'nao aplica',fin.hasF?'vn':'vne'],
-    ['Penalidade Temperatura',fin.penTemp?'-'+fr(fin.penTemp):'nao aplica',fin.penTemp?'vn':'vne'],
-    ['Oportunidade K',fin.oppK?'-'+fr(fin.oppK):'nao aplica',fin.oppK?'vp':'vne'],
-    ['Multa Cidade D',fin.hasD?'verificar horario':'nao incluso','vne'],
-    ['Eficiencia G',fin.hasG?'-'+fr(500):'nao incluso',fin.hasG?'vp':'vne'],
-    ['Penalidade Jornada',fin.penJorn?'-'+fr(fin.penJorn):'nao aplica',fin.penJorn?'vn':'vne']
-  ].map(function(x){return '<tr><td>'+x[0]+'</td><td class="'+x[2]+'" style="text-align:right">'+x[1]+'</td></tr>';}).join('');
-  var notaInputs=[['matriz','Matriz de Decisao',2.5],['roteiro','Roteiro e Ordem',2.5],['perecib','Perecibilidade',2.5],['calculo','Memoria de Calculo',2.5]].map(function(x){return '<div class="nota-item"><label>'+x[1]+'</label><input type="number" min="0" max="'+x[2]+'" step="0.1" id="nota_'+gid+'_'+x[0]+'" value="'+(nota[x[0]]||'')+'" placeholder="0" oninput="calcNota(\''+row.grupo+'\',\''+gid+'\')"><div class="nmax">max '+x[2]+'</div></div>';}).join('');
-  return alertas+
-    '<div class="slabel">Identificacao e Decisao</div>'+
-    '<div class="dg dg3"><div class="db hi"><div class="db-lbl">Membros</div><div class="db-val">'+esc(row.membros||'---')+'</div></div><div class="db hi"><div class="db-lbl">Curso</div><div class="db-val">'+esc(row.curso||'---')+'</div></div><div class="db hi"><div class="db-lbl">Entrega</div><div class="db-val">'+esc(row.timestamp||'---')+'</div></div></div>'+
-    '<div class="dg dg2"><div class="db"><div class="db-lbl">Criterio Principal</div><div class="db-val">'+esc(row.criterio||'---')+'</div></div><div class="db"><div class="db-lbl">Cidades Escolhidas</div><div class="db-val">'+esc(row.cidades||'---')+'</div></div></div>'+
-    '<div class="dg dg2"><div class="db"><div class="db-lbl">Objetivo Principal</div><div class="db-val">'+esc(row.objetivo||'---')+'</div></div><div class="db"><div class="db-lbl">Metas</div><div class="db-val">'+esc(row.metas||'---')+'</div></div></div>'+
-    '<div class="dg dg1"><div class="db info"><div class="db-lbl">Resposta -- Onda de Calor</div><div class="db-val">'+esc(row.onda_resp||'---')+'</div></div></div>'+
-    '<div class="slabel">Roteiro de Entrega</div>'+
-    '<div class="dg dg3" style="margin-bottom:14px">'+
-    '<div class="db '+(pct>100?'danger':pct>85?'warn':'hi')+'"><div class="db-lbl">Distancia Total</div><div class="db-val big '+(pct>100?'neg':'')+'">'+fin.totalKm+' km</div></div>'+
-    '<div class="db '+(pct>100?'danger':pct>85?'warn':'hi')+'"><div class="db-lbl">Tempo Total</div><div class="db-val big '+(pct>100?'neg':'')+'">'+hm(fin.totalMins)+'</div><div class="prog"><div class="prog-fill" style="width:'+Math.min(100,pct)+'%;background:'+pc+'"></div></div><div style="font-size:10px;color:var(--ink4);margin-top:4px">'+pct+'% da jornada \u00b7 Retorno ~'+hm(5*60+fin.totalMins)+'</div></div>'+
-    '<div class="db '+(fin.resultado>0?'hi':fin.resultado<0?'danger':'')+'"><div class="db-lbl">Lucro Liquido Estimado</div><div class="db-val big '+rc+'">'+(fin.totalKm?fr(fin.resultado):'---')+'</div></div></div>'+
-    '<div style="overflow-x:auto;border-radius:var(--radius);border:1px solid var(--surface3);margin-bottom:18px"><table class="rt"><thead><tr><th>#</th><th>Origem</th><th>Destino</th><th>Km</th><th>Tempo</th><th>Chegada (05:00h)</th><th>Justificativa</th></tr></thead><tbody>'+(rotaRows||'<tr><td colspan="7" style="text-align:center;color:var(--ink4);padding:20px">Roteiro nao preenchido</td></tr>')+'</tbody></table></div>'+
-    '<div class="dg dg1"><div class="db"><div class="db-lbl">Justificativa Geral das Cidades</div><div class="db-val">'+esc(row.just_cidades||'---')+'</div></div></div>'+
-    '<div class="slabel">Calculo Financeiro</div>'+
-    '<div class="dg dg2"><div class="db"><div class="db-lbl">Calculo Automatico (referencia)</div><table class="ct"><thead><tr><th>Item</th><th style="text-align:right">Valor</th></tr></thead><tbody>'+calcRows+'</tbody><tr class="total"><td><strong>Lucro Liquido Estimado</strong></td><td style="text-align:right" class="'+rc+'"><strong>'+(fin.totalKm?fr(fin.resultado):'---')+'</strong></td></tr></table></div><div class="db"><div class="db-lbl">Memoria de Calculo do Grupo</div><div class="db-val mono">'+esc(row.memoria||'Nao preenchida')+'</div></div></div>'+
-    '<div class="slabel">Analise de Perecibilidade</div>'+
-    '<div class="dg dg2"><div class="db"><div class="db-lbl">&#127807; Tilapia Fresca</div><div class="db-val">'+esc(row.tilap||'---')+'</div></div><div class="db"><div class="db-lbl">&#127807; Hortalicas Folhosas</div><div class="db-val">'+esc(row.hortalica||'---')+'</div></div></div>'+
-    '<div class="dg dg2"><div class="db"><div class="db-lbl">&#127818; Frutas de Epoca</div><div class="db-val">'+esc(row.frutas||'---')+'</div></div><div class="db info"><div class="db-lbl">&#9851; Zootecnia / Economia Circular</div><div class="db-val">'+esc(row.zootecnia||'---')+'</div></div></div>'+
-    (row.obs?'<div class="dg dg1"><div class="db"><div class="db-lbl">Observacoes Finais</div><div class="db-val">'+esc(row.obs)+'</div></div></div>':'')+
-    '<div class="slabel">Avaliacao do Professor</div>'+
-    '<div class="nota-box"><h4>&#128221; Notas por Criterio</h4><div class="nota-grid">'+notaInputs+'</div>'+
-    '<div class="nota-comment"><label>Comentario / Feedback</label><textarea id="nota_'+gid+'_comentario" placeholder="Pontos fortes, o que melhorar..." oninput="saveNota(\''+row.grupo+'\',\''+gid+'\')">'+esc(nota.comentario||'')+'</textarea></div>'+
-    '<div class="nota-footer"><div><div class="nota-total" id="nota_'+gid+'_total">'+(calcNT(nota)||'---')+'</div><div class="nota-total-label">/ 10 pontos</div></div>'+
-    '<div class="nota-actions"><button class="btn btn-yellow btn-sm" onclick="saveNota(\''+row.grupo+'\',\''+gid+'\')">&#128190; Salvar nota</button>'+
-    '<span class="nota-saved" id="nota_'+gid+'_saved">&#10003; Salvo</span></div></div></div>';
+  baixar(linhas.map(r=>r.join(',')).join('\n'), 'notas_cinturao_verde.csv', 'text/csv');
 }
 
-// ═══════════════════════════════════════════════
-// NOTAS
-// ═══════════════════════════════════════════════
-function calcNT(nota){var k=['matriz','roteiro','perecib','calculo'];return Math.round(k.reduce(function(a,b){return a+(parseFloat(nota[b])||0);},0)*10)/10;}
-function calcNota(grupo,gid){
-  ['matriz','roteiro','perecib','calculo'].forEach(function(k){var el=document.getElementById('nota_'+gid+'_'+k);if(!el)return;notas[grupo]=notas[grupo]||{};notas[grupo][k]=parseFloat(el.value)||0;});
-  var el=document.getElementById('nota_'+gid+'_total');if(el)el.textContent=calcNT(notas[grupo])||'---';
-}
-function saveNota(grupo,gid){
-  calcNota(grupo,gid);
-  var c=document.getElementById('nota_'+gid+'_comentario');if(c){notas[grupo]=notas[grupo]||{};notas[grupo].comentario=c.value;}
-  localStorage.setItem('pbl2026_notas',JSON.stringify(notas));
-  var s=document.getElementById('nota_'+gid+'_saved');if(s){s.classList.add('show');setTimeout(function(){s.classList.remove('show');},2500);}
+function salvarNotas() {
+  exportarTudo();
+  alert('Notas salvas e arquivo JSON baixado!');
 }
 
-// ═══════════════════════════════════════════════
-// TOGGLE + EXPORT
-// ═══════════════════════════════════════════════
-function toggleCard(gid){
-  var body=document.getElementById('body_'+gid),hd=document.getElementById('hd_'+gid);
-  if(!body||!hd)return;
-  var opening=!body.classList.contains('open');
-  document.querySelectorAll('.gcard-body').forEach(function(el){el.classList.remove('open');});
-  document.querySelectorAll('.gcard-hd').forEach(function(el){el.classList.remove('open');});
-  if(opening){body.classList.add('open');hd.classList.add('open');expanded=gid;setTimeout(function(){body.scrollIntoView({behavior:'smooth',block:'start'});},100);}
-  else{expanded=null;}
+function imprimirRelatorio() { window.print(); }
+
+function baixar(conteudo, nome, tipo) {
+  const blob = new Blob([conteudo], { type: tipo });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = nome; a.click();
+  URL.revokeObjectURL(url);
 }
 
-function exportarNotas(){
-  if(!allRows.length){alert('Carregue os dados primeiro.');return;}
-  var linhas=[['Grupo','Curso','Membros','Resultado Est.','Matriz (2.5)','Roteiro (2.5)','Perecibilidade (2.5)','Calculo (2.5)','Total (10)','Comentario']];
-  allRows.forEach(function(row){
-    var nota=notas[row.grupo]||{};
-    var fin=calcFin(parseRota(row.rota_str,row.just_rota));
-    linhas.push([row.grupo,row.curso,row.membros,fin.totalKm?Math.round(fin.resultado):'',nota.matriz||0,nota.roteiro||0,nota.perecib||0,nota.calculo||0,calcNT(nota),nota.comentario||'']);
-  });
-  var csv=linhas.map(function(l){return l.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');}).join('\n');
-  var blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='PBL2026_Notas_'+new Date().toLocaleDateString('pt-BR').replace(/\//g,'-')+'.csv';a.click();
+// ═══════════════════════════════════════════
+//  Helpers
+// ═══════════════════════════════════════════
+function setStatus(tipo, msg) {
+  const el = document.getElementById('statusBar');
+  el.className = tipo;
+  el.innerHTML = `<span class="dot"></span> ${msg}`;
+}
+
+function formatarTempo(h) {
+  const hh = Math.floor(h);
+  const mm = Math.round((h - hh) * 60);
+  return `${hh}h${mm.toString().padStart(2,'0')}min`;
+}
+
+function contarPalavras(txt) {
+  if (!txt) return 0;
+  return txt.trim().split(/\s+/).filter(Boolean).length;
+}
+
+function corNota(n) {
+  if (n >= 7) return 'var(--verde-l)';
+  if (n >= 5) return 'var(--ouro)';
+  return '#ff8080';
+}
+
+// ═══════════════════════════════════════════
+//  JSON de exemplo para testes
+// ═══════════════════════════════════════════
+window.addEventListener('load', () => {
+  // Injeta botão de dados de exemplo
+  const area = document.getElementById('previewArea');
+  const btn = document.createElement('button');
+  btn.className = 'btn-action'; btn.style.marginTop = '12px';
+  btn.textContent = '🧪 Carregar dados de exemplo (teste)';
+  btn.onclick = carregarExemplo;
+  document.getElementById('statusBar').after(btn);
+});
+
+function carregarExemplo() {
+  const exemplo = {
+    grupos: [
+      {
+        grupo: "Grupo 1", submetido: true,
+        cidades: ["A","C","D","E","I","J"],
+        distanciaTotal: 280, receita: 18000, ondaCalor: true,
+        produtos: { frutas: true, peixe: true },
+        discursivas: {
+          "Identificação do problema": "O principal problema logístico identificado foi a gestão do tempo de entrega considerando a onda de calor e o aumento dos custos de combustível nas rotas mais longas.",
+          "Análise logística": "Optamos por incluir a cidade C para obter desconto no diesel e a cidade I para aproveitar a economia circular com os resíduos de frutas danificadas.",
+          "Decisão estratégica": "A decisão de evitar a cidade F foi estratégica pois a estrada de terra danificaria as frutas transportadas causando perda financeira significativa.",
+          "Reflexão integrada": "O exercício demonstrou como a logística reversa e a economia circular podem transformar perdas em oportunidades dentro da cadeia produtiva do agronegócio."
+        }
+      },
+      {
+        grupo: "Grupo 2", submetido: true,
+        cidades: ["B","C","E","F","G","H"],
+        distanciaTotal: 310, receita: 16500, ondaCalor: false,
+        produtos: { vegetais: true, frutas: true },
+        discursivas: {
+          "Identificação do problema": "Identificamos que a rota com cidade F apresenta risco para produtos perecíveis devido à estrada não pavimentada.",
+          "Análise logística": "A análise mostrou que incluir vegetais na rota pela cidade B aumenta a margem em 15 porcento.",
+          "Decisão estratégica": "Mantivemos a cidade F mesmo sabendo do risco pois a distância era menor.",
+          "Reflexão integrada": "Percebemos que decisões puramente de distância nem sempre são ótimas quando consideramos as penalidades envolvidas."
+        }
+      },
+      {
+        grupo: "Grupo 3", submetido: true,
+        cidades: ["A","B","C","E","I","K"],
+        distanciaTotal: 260, receita: 19500, ondaCalor: true,
+        produtos: { peixe: true, vegetais: true, frutas: true },
+        discursivas: {
+          "Identificação do problema": "O desafio central foi maximizar os bônus disponíveis nas cidades A B e E enquanto minimizamos custos de combustível sob onda de calor.",
+          "Análise logística": "Calculamos que passar pela cidade C reduz o custo de diesel em 20 porcento compensando o trajeto adicional.",
+          "Decisão estratégica": "A estratégia multi-produto permitiu acumular três bônus distintos sendo a melhor configuração financeira encontrada pelo grupo.",
+          "Reflexão integrada": "A integração entre as disciplinas de Agronomia e Zootecnia ficou evidente quando transformamos resíduos agrícolas em insumos para alimentação animal através da cidade I."
+        }
+      },
+      {
+        grupo: "Grupo 4", submetido: false,
+        cidades: [], distanciaTotal: 0, receita: 0, ondaCalor: false,
+        produtos: {}, discursivas: {}
+      },
+    ]
+  };
+  processarDados(exemplo, 'Exemplo de demonstração');
+  switchTab('grupos');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-btn')[1].classList.add('active');
 }
 </script>
 </body>
